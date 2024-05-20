@@ -52,18 +52,25 @@ struct commutative_ring coeff_ring = {
     .expZ = expZ
 };
 
+// ================
+// Multiplication instructions
+
+// mullong computes the long product of a and b.
 int64_t mullong(int32_t a, int32_t b){
     return (int64_t)a * b;
 }
 
+// mullo computes the low part of the long product of a and b.
 int32_t mullo(int32_t a, int32_t b){
     return a * b;
 }
 
+// Return the high part of a.
 int32_t gethi(int64_t a){
     return (int32_t)(a >> 32);
 }
 
+// The accumulative variant of Montgomery multiplication.
 int32_t montgomery_acc_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
 
     int64_t prod;

@@ -52,14 +52,20 @@ struct commutative_ring coeff_ring = {
     .expZ = expZ
 };
 
+// ================
+// Multiplication instructions
+
+// mulhi computes the high part of the long product of a and b.
 int32_t mulhi(int32_t a, int32_t b){
     return (int32_t)(((int64_t)a * b) >> 32);
 }
 
+// mulhi computes the low part of the long product of a and b.
 int32_t mullo(int32_t a, int32_t b){
     return a * b;
 }
 
+// The subtractive variant of Montgomery multiplication.
 int32_t montgomery_sub_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
 
     int32_t lo, hi;
@@ -73,6 +79,7 @@ int32_t montgomery_sub_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
 
 }
 
+// The subtractive variant of Montgomery multiplication with a precomputed operand.
 int32_t montgomery_sub_mul_pre(int32_t a, int32_t b, int32_t bqprime, int32_t q){
 
     int32_t lo, hi;
