@@ -18,7 +18,8 @@
 #define NTESTS 1000
 
 // ================
-// Z_Q
+// Definition of Z_Q with signed arithmetic.
+// See "tools.h" for explanations.
 
 int32_t mod = Q;
 
@@ -42,7 +43,7 @@ void expZ(void *des, void *src, size_t e){
     expmod_int32(des, src, e, &mod);
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(int32_t),
     .memberZ = memberZ,
     .addZ = addZ,

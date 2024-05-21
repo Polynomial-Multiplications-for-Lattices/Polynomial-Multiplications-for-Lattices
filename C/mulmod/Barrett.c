@@ -16,7 +16,6 @@
 // by approximating the quotient a b / Q and subtract approx(a b / Q) Q from a b.
 // As long as approx(a b / Q) is close to a b / Q, |a b - approx(a b / Q) Q| < R / 2.
 
-
 // ================
 // Theory.
 // Observe that a b mod^+- Q = a b - round(a b / Q) Q, if we replace round(a b / Q) with
@@ -60,7 +59,7 @@ void expZ(void *des, void *src, size_t e){
     expmod_int32(des, src, e, &mod);
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(int32_t),
     .memberZ = memberZ,
     .addZ = addZ,
@@ -100,15 +99,41 @@ int32_t get_barrett_hi(int32_t a, int32_t rmodq, int32_t qprime){
 }
 
 // Barrett multiplication.
+// Let bhi = round(b R  / Q). This function computes a b - round(a bhi / R) Q with
+// (a b - round(a bhi / R) Q ) mod^+- R
+// = ( (a b mod^+- R) - round(a bhi / R) Q ) mod^+- R.
+// As long as | a b - round(a bhi / R) Q | < R / 2,
+// reducting modulo R yields the same result as an integer.
 int32_t barrett_mul(int32_t a, int32_t b, int32_t q, int32_t rmodq, int32_t qprime){
 
     int32_t lo, hi;
     int32_t bhi;
 
-    lo = a * b;
+    // bhi = round(b R / Q)
     bhi = get_barrett_hi(b, rmodq, qprime);
+    // lo = a b mod^+- R
+    lo = a * b;
+    // hi = round(a bhi / R)
     hi = mulhir(a, bhi);
 
+    // ( (a b mod^+- R) - round(a bhi / R ) Q ) mod^+- R
+    // = a b - round(a bhi / R) Q (since |a b - round(a bhi / R) Q| < R / 2)
+    return lo - hi * q;
+
+}
+
+// Barrett multiplication with precomputed bhi = round(b R / Q).
+int32_t barrett_mul_pre(int32_t a, int32_t b, int32_t bhi, int32_t q){
+
+    int32_t lo, hi;
+
+    // lo = a b mod^+- R
+    lo = a * b;
+    // hi = round(a bhi / R)
+    hi = mulhir(a, bhi);
+
+     // ( (a b mod^+- R) - round(a bhi / R ) Q ) mod^+- R
+    // = a b - round(a bhi / R) Q (since |a b - round(a bhi / R) Q| < R / 2)
     return lo - hi * q;
 
 }
@@ -124,17 +149,49 @@ int main(void){
 
     for(size_t i = 0; i < NTESTS; i++){
 
+        // Generate random elements in Z_Q.
         t = rand() % Q;
         coeff_ring.memberZ(&a, &t);
         t = rand() % Q;
         coeff_ring.memberZ(&b, &t);
 
+        // Compute the product of a and b modulo Q.
         coeff_ring.mulZ(&ref, &a, &b);
 
+        // Compute a value equivalent to the product of a and b with Barrett multiplication.
         res = barrett_mul(a, b, q, rmodq, qprime);
 
+        // Map the value to Z_Q.
+        // Notice that this step is needed only when we want the canonical representations of the
+        // values.
         coeff_ring.memberZ(&res, &res);
 
+        // Compare the resulting values.
+        assert(ref == res);
+
+    }
+
+    for(size_t i = 0; i < NTESTS; i++){
+
+        // Generate random elements in Z_Q.
+        t = rand() % Q;
+        coeff_ring.memberZ(&a, &t);
+        t = rand() % Q;
+        coeff_ring.memberZ(&b, &t);
+
+        // Compute the product of a and b modulo Q.
+        coeff_ring.mulZ(&ref, &a, &b);
+
+        // Assuming b is known, we precompute round(b R / Q) and compute a value equivalent to
+        // the product of a and b with Barrett multiplication.
+        res = barrett_mul_pre(a, b, get_barrett_hi(b, rmodq, qprime), q);
+
+        // Map the value to Z_Q.
+        // Notice that this step is needed only when we want the canonical representations of the
+        // values.
+        coeff_ring.memberZ(&res, &res);
+
+        // Compare the resulting values.
         assert(ref == res);
 
     }

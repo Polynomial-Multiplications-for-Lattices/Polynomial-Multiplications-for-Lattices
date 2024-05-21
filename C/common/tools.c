@@ -1,9 +1,10 @@
 
+#include <memory.h>
 
 #include "tools.h"
 
 // ================================
-// Reducing elements to mod mod_v.
+// Candidates for memberZ.
 
 void cmod_int16(void *des, void *src, void *mod){
     int16_t mod_v = *(int16_t*)mod;
@@ -42,7 +43,7 @@ void cmod_int64(void *des, void *src, void *mod){
 }
 
 // ================================
-// Addition in mod mov_v.
+// Candidates for addZ.
 
 void addmod_int16(void *des, void *src1, void *src2, void *mod){
 
@@ -71,7 +72,7 @@ void addmod_int32(void *des, void *src1, void *src2, void *mod){
 }
 
 // ================================
-// Subtraction in mod mov_v.
+// Candidates for subZ.
 
 void submod_int16(void *des, void *src1, void *src2, void *mod){
 
@@ -100,7 +101,7 @@ void submod_int32(void *des, void *src1, void *src2, void *mod){
 }
 
 // ================================
-// Multiplication in mod mov_v.
+// Candidates for mulZ.
 
 void mulmod_int16(void *des, void *src1, void *src2, void *mod){
 
@@ -129,7 +130,7 @@ void mulmod_int32(void *des, void *src1, void *src2, void *mod){
 }
 
 // ================================
-// Exponentiation in mod mov_v.
+// Candidates for expZ.
 
 void expmod_int16(void *des, void *src, size_t e, void *mod){
 
@@ -166,7 +167,8 @@ void expmod_int32(void *des, void *src, size_t e, void *mod){
 }
 
 // ================================
-// In-place bit-reversing the array.
+// In-place bit-reversal.
+
 void bitreverse(void *src, size_t len, size_t size){
 
     char tmp[size];

@@ -1,4 +1,6 @@
 
+#include <memory.h>
+
 #include "tools.h"
 #include "ntt_c.h"
 
@@ -8,7 +10,7 @@ void CT_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
     void *twiddle,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char tmp[ring.sizeZ];
@@ -25,7 +27,7 @@ void GS_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
     void *twiddle,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char tmp[ring.sizeZ];
@@ -42,7 +44,7 @@ void CT_NTT_core(
     size_t level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step;
@@ -66,7 +68,7 @@ void CT_iNTT_core(
     size_t level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step;
@@ -90,7 +92,7 @@ void GS_iNTT_core(
     size_t level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step;
@@ -113,7 +115,7 @@ void CT_NTT(
     void *src,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     for(size_t i = 0; i < _profile.log_ntt_n; i++){
@@ -127,7 +129,7 @@ void CT_iNTT(
     void *src,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     for(size_t i = 0; i < _profile.log_ntt_n; i++){
@@ -141,7 +143,7 @@ void GS_iNTT(
     void *src,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     for(ssize_t i = _profile.log_ntt_n - 1; i >= 0; i--){
@@ -158,7 +160,7 @@ void m_layer_CT_butterfly(
     void *src,
     size_t layers, size_t step,
     void *_root_table,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
@@ -197,7 +199,7 @@ void m_layer_CT_ibutterfly(
     void *src,
     size_t layers, size_t step,
     void *_root_table,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
@@ -236,7 +238,7 @@ void m_layer_GS_ibutterfly(
     void *src,
     size_t layers, size_t step,
     void *_root_table,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
@@ -277,7 +279,7 @@ void compressed_CT_NTT(
     size_t start_level, size_t end_level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step, offset;
@@ -334,7 +336,7 @@ void compressed_CT_iNTT(
     size_t start_level, size_t end_level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step, offset;
@@ -395,7 +397,7 @@ void compressed_GS_iNTT(
     size_t start_level, size_t end_level,
     void *_root_table,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t step, offset;

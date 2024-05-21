@@ -1,3 +1,4 @@
+
 # Polynomial-Multiplications-for-Lattices
 
 This repository collects several tricks for polynomial multiplications that have found practical importance in lattice-based cryptosystems.
@@ -30,6 +31,13 @@ Shmuel Winograd. Arithmetic Complexity of Computations, volume 33. Society for I
 # Call for Contributors
 
 TBA
+
+# TODOs
+
+- See if we want to include Kronecker substitution. There are two incentives.
+    - Paper [Post-Quantum Cryptography with Contemporary Co-Processors: Beyond Kronecker, Schönhage-Strassen & Nussbaumer](https://www.usenix.org/conference/usenixsecurity22/presentation/bos) reduces polynomial multiplications to large integer multiplications.
+    - The program [here](https://github.com/mupq/pqm4/blob/Round3/crypto_kem/sntrup761/m4f/jump16divsteps_mod3_asm.S) shows how to multiply polynomials over Z_3 with the long multiplication instructions `umull` and `umlal`.
+
 
 
 

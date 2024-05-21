@@ -12,7 +12,7 @@ void gen_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -21,7 +21,7 @@ void gen_DWT_table(
     void *des,
     void *scale, void *omega, void *zeta,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -30,7 +30,7 @@ void gen_inv_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -40,7 +40,7 @@ void gen_streamlined_DWT_table(
     void *des,
     void *scale, void *omega, void *zeta,
     struct compress_profile _profile, bool pad,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -50,7 +50,7 @@ void gen_streamlined_inv_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile, bool pad,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -59,7 +59,7 @@ void gen_twist_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 // ================================
@@ -68,7 +68,7 @@ void gen_mul_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     );
 
 #endif

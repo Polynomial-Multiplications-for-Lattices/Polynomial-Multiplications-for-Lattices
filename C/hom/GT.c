@@ -61,7 +61,7 @@ void expZ(void *des, void *src, size_t e){
     expmod_int16(des, src, e, &mod);
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(int16_t),
     .memberZ = memberZ,
     .addZ = addZ,
@@ -116,7 +116,7 @@ void expZ_convol(void *des, void *src, size_t e){
     return;
 }
 
-struct commutative_ring convol_ring = {
+struct ring convol_ring = {
     .sizeZ = sizeof(int16_t) * 3,
     .memberZ = memberZ_convol,
     .addZ = addZ_convol,

@@ -73,7 +73,7 @@ void expZ(void *des, void *src, size_t e){
     memmove(des, &tmp_v, sizeof(int32_t));
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(int32_t),
     .memberZ = memberZ,
     .addZ = addZ,
@@ -129,7 +129,7 @@ void expZ_negacyclic(void *des, void *src, size_t e){
     memmove(des, tmp_v, INNER_N * coeff_ring.sizeZ);
 }
 
-struct commutative_ring negacyclic_ring = {
+struct ring negacyclic_ring = {
     .sizeZ = COEFF_SIZE * INNER_N,
     .memberZ = memberZ_negacyclic,
     .addZ = addZ_negacyclic,

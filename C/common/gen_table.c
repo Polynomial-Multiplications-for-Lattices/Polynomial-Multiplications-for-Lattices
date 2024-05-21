@@ -1,4 +1,4 @@
-#include <stdlib.h>
+
 #include <memory.h>
 
 #include "tools.h"
@@ -10,7 +10,7 @@ void gen_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char zeta[ring.sizeZ];
@@ -36,7 +36,7 @@ void gen_DWT_table(
     void *des,
     void *scale, void *omega, void *zeta,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char buff[_profile.ntt_n * ring.sizeZ];
@@ -67,7 +67,7 @@ void gen_inv_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char zeta[ring.sizeZ];
@@ -92,7 +92,7 @@ void gen_streamlined_DWT_table(
     void *des,
     void *scale, void *omega, void *zeta,
     struct compress_profile _profile, bool pad,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     size_t start_level;
@@ -138,7 +138,7 @@ void gen_streamlined_inv_CT_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile, bool pad,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char zeta[ring.sizeZ];
@@ -188,7 +188,7 @@ void gen_twist_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char zeta[ring.sizeZ];
@@ -211,7 +211,7 @@ void gen_mul_table(
     void *des,
     void *scale, void *omega,
     struct compress_profile _profile,
-    struct commutative_ring ring
+    struct ring ring
     ){
 
     char zeta[ring.sizeZ];

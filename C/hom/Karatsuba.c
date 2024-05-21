@@ -58,7 +58,7 @@ void expZ(void *des, void *src, size_t e){
     memmove(des, &tmp_v, sizeof(uint64_t));
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(uint64_t),
     .memberZ = memberZ,
     .addZ = addZ,
@@ -71,7 +71,7 @@ struct commutative_ring coeff_ring = {
 
 // len must be even.
 static
-void karatsuba_eval(void *des, void *src, size_t len, struct commutative_ring ring){
+void karatsuba_eval(void *des, void *src, size_t len, struct ring ring){
 
     for(size_t i = 0; i < (len / 2); i++){
         ring.addZ(des + i * ring.sizeZ, src + i * ring.sizeZ, src + ((len / 2) + i) * ring.sizeZ);
@@ -81,7 +81,7 @@ void karatsuba_eval(void *des, void *src, size_t len, struct commutative_ring ri
 
 // len must be even.
 static
-void karatsuba_interpol(void *des, void *src, size_t len, struct commutative_ring ring){
+void karatsuba_interpol(void *des, void *src, size_t len, struct ring ring){
 
     // Interpolation.
     for(size_t i = 0; i < len - 1; i++){
@@ -99,7 +99,7 @@ void karatsuba_interpol(void *des, void *src, size_t len, struct commutative_rin
 // threshold | len,
 // len / threshold must be a power of two.
 static
-void karatsuba_recur(void *des, void *src1, void *src2, size_t len, size_t threshold, struct commutative_ring ring){
+void karatsuba_recur(void *des, void *src1, void *src2, size_t len, size_t threshold, struct ring ring){
 
     // If len <= threshold, we apply the naive long multiplication.
     if(len <= threshold){

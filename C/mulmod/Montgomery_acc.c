@@ -8,6 +8,23 @@
 
 #include "tools.h"
 
+// ================
+// This file demonstrates accumulative variant of the signed Montgomery multiplication.
+// Let a and b be the operands that we wish to multiply, Q be the modulus, and R > Q be
+// the arithmetic precision.
+// Montgomery multiplication computes a value that is equivalent to a b R^(-1) mod^+- Q.
+// If b is known, we replace it with b R mod^+- Q and then Montgomery multiplication computes
+// a value that is equivalent to a b mod^+- Q.
+
+// ================
+// Theory.
+// Observe that a b + (- a b Q^(-1) mod^+- R) Q is equivalent to 0 modulo R and equivalent
+// to a b modulo Q, (a b + ( - a b Q^(-1) mod^+- R ) Q ) / R is an integer that is equivalent
+// to a b R^(-1) mod^+- Q.
+// It remains to show that (a b + ( - a b Q^(-1) mod^+- R ) Q ) / R is reduced.
+// Taking the absolute value yields Q / 2 + |a b| / R.
+// If |b| > Q /2, we have Q / 2 (1 + |a| / R).
+
 // R = 2^32 below
 #define Q 8380417
 // RmodQ = R mod^+- Q
@@ -18,7 +35,8 @@
 #define NTESTS 1000
 
 // ================
-// Z_Q
+// Definition of Z_Q with signed arithmetic.
+// See "tools.h" for explanations.
 
 int32_t mod = Q;
 
@@ -42,7 +60,7 @@ void expZ(void *des, void *src, size_t e){
     expmod_int32(des, src, e, &mod);
 }
 
-struct commutative_ring coeff_ring = {
+struct ring coeff_ring = {
     .sizeZ = sizeof(int32_t),
     .memberZ = memberZ,
     .addZ = addZ,
