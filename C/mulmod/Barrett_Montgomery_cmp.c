@@ -7,7 +7,6 @@
 #include <assert.h>
 
 #include "tools.h"
-#include "naive_mult.h"
 
 // R = 2^32 below
 #define Q 8380417

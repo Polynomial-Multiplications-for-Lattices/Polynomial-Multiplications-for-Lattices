@@ -17,7 +17,7 @@ C_SOURCEs =
 SOURCEs = $(ASM_SOURCEs) $(C_SOURCEs) $(COMMON_SOURCE)
 HEADERs = $(ASM_HEADERs) $(C_HEADERs)
 
-all: Montgomery_acc Montgomery_sub Barrett Barrett_Montgomery_cmp
+all: Montgomery_acc Montgomery_sub Barrett Barrett_approx Barrett_Montgomery_cmp
 
 Montgomery_acc: Montgomery_acc.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
@@ -26,6 +26,9 @@ Montgomery_sub: Montgomery_sub.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
 
 Barrett: Barrett.c $(SOURCEs) $(HEADERs)
+	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
+
+Barrett_approx: Barrett_approx.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
 
 Barrett_Montgomery_cmp: Barrett_Montgomery_cmp.c $(SOURCEs) $(HEADERs)
@@ -37,6 +40,7 @@ clean:
 	rm -f Montgomery_acc
 	rm -f Montgomery_sub
 	rm -f Barrett
+	rm -f Barrett_approx
 	rm -f Barrett_Montgomery_cmp
 
 

@@ -54,9 +54,27 @@ struct commutative_ring coeff_ring = {
 // ================
 // Multiplication instructions
 
-// mullong computes the long product of a and b.
-int64_t mullong(int32_t a, int32_t b){
-    return (int64_t)a * b;
+// mulh_approx computes an approximation of the high part of the long product of a and b.
+// Let's write a = alo + ahi * 2^16, b = blo + bhi * 2^16.
+// mulh_approx computes ahi * bhi + floor(ahi * blo / 2^16) + floor(alo * bhi / 2^16).
+// One can show that the results is within +- of floor(a * b / 2^32).
+int32_t mulh_approx(int32_t a, int32_t b){
+
+    int32_t alo, ahi;
+    int32_t blo, bhi;
+    int32_t res;
+
+    alo = (int32_t)((uint16_t)a);
+    ahi = a >> 16;
+    blo = (int32_t)((uint16_t)b);
+    bhi = b >> 16;
+
+    res = ahi * bhi;
+    res += (ahi * blo) >> 16;
+    res += (alo * bhi) >> 16;
+
+    return res;
+
 }
 
 // mullo computes the low part of the long product of a and b.
@@ -64,22 +82,33 @@ int32_t mullo(int32_t a, int32_t b){
     return a * b;
 }
 
-// Return the high part of a.
-int32_t gethi(int64_t a){
-    return (int32_t)(a >> 32);
+// round( a R / Q )
+// a R mod^+- Q = a R - round(a R / Q) Q
+// => round(a R / Q) Q = a R - (a R mod^+- Q)
+// => round(a R / Q) = (a R mod^+- Q) * (-Q^(-1) mod^+- R) mod^+- R
+int32_t get_barrett_hi(int32_t a, int32_t rmodq, int32_t qprime){
+
+    int32_t t;
+
+    // a * RmodQ mod^+- Q
+    coeff_ring.mulZ(&t, &a, &rmodq);
+
+    // (a * RmodQ mod^+- Q) * Qprime mod^+- R
+    return t * qprime;
+
 }
 
-// The accumulative variant of Montgomery multiplication.
-int32_t montgomery_acc_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
+// Barrett multiplication.
+int32_t barrett_mul(int32_t a, int32_t b, int32_t q, int32_t rmodq, int32_t qprime){
 
-    int64_t prod;
-    int32_t lo;
+    int32_t lo, hi;
+    int32_t bhi;
 
-    prod = mullong(a, b);
-    lo = mullo(prod, qprime);
-    prod += mullong(lo, q);
+    lo = a * b;
+    bhi = get_barrett_hi(b, rmodq, qprime);
+    hi = mulh_approx(a, bhi);
 
-    return gethi(prod);
+    return lo - hi * q;
 
 }
 
@@ -101,9 +130,9 @@ int main(void){
 
         coeff_ring.mulZ(&ref, &a, &b);
 
-        res = montgomery_acc_mul(a, b, q, qprime);
+        res = barrett_mul(a, b, q, rmodq, qprime);
 
-        coeff_ring.mulZ(&res, &res, &rmodq);
+        coeff_ring.memberZ(&res, &res);
 
         assert(ref == res);
 
@@ -112,8 +141,3 @@ int main(void){
     printf("Test finished!\n");
 
 }
-
-
-
-
-

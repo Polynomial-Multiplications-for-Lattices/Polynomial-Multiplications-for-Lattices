@@ -7,7 +7,23 @@
 #include <assert.h>
 
 #include "tools.h"
-#include "naive_mult.h"
+
+// ================
+// This file demonstrates signed Barrett multiplication.
+// Let a and b be the operands that we wish to multiply, Q be the modulus, and R > Q be
+// the arithmetic precision.
+// Barrett multiplication computes a value that is reasonably close to a b mod^+- Q
+// by approximating the quotient a b / Q and subtract approx(a b / Q) Q from a b.
+// As long as approx(a b / Q) is close to a b / Q, |a b - approx(a b / Q) Q| < R / 2.
+
+
+// ================
+// Theory.
+// Observe that a b mod^+- Q = a b - round(a b / Q) Q, if we replace round(a b / Q) with
+// a function admit efficient computation with a reasonably tolerable error delta,
+// then the result is off by delta Q. Therefore, we just need to ensure
+// (delta + 1 / 2) Q < R / 2.
+// See Barrett_Montgomery_cmp for a formal proof.
 
 // R = 2^32 below
 #define Q 8380417
@@ -19,7 +35,8 @@
 #define NTESTS 1000
 
 // ================
-// Z_Q
+// Definition of Z_Q with signed arithmetic.
+// See "tools.h" for explanations.
 
 int32_t mod = Q;
 

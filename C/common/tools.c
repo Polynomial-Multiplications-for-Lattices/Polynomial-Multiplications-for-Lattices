@@ -8,11 +8,11 @@
 void cmod_int16(void *des, void *src, void *mod){
     int16_t mod_v = *(int16_t*)mod;
     int16_t t = (*(int16_t*)src) % mod_v;
-    if(t >= (mod_v >> 1)){
-        t -= mod_v;
-    }
     if(t < -(mod_v >> 1)){
         t += mod_v;
+    }
+    if(t > (mod_v >> 1)){
+        t -= mod_v;
     }
     *(int16_t*)des = t;
 }
@@ -20,11 +20,11 @@ void cmod_int16(void *des, void *src, void *mod){
 void cmod_int32(void *des, void *src, void *mod){
     int32_t mod_v = *(int32_t*)mod;
     int32_t t = (*(int32_t*)src) % mod_v;
-    if(t >= (mod_v >> 1)){
-        t -= mod_v;
-    }
     if(t < -(mod_v >> 1)){
         t += mod_v;
+    }
+    if(t > (mod_v >> 1)){
+        t -= mod_v;
     }
     *(int32_t*)des = t;
 }
@@ -32,11 +32,11 @@ void cmod_int32(void *des, void *src, void *mod){
 void cmod_int64(void *des, void *src, void *mod){
     int64_t mod_v = *(int64_t*)mod;
     int64_t t = (*(int64_t*)src) % mod_v;
-    if(t >= (mod_v >> 1)){
-        t -= mod_v;
-    }
     if(t < -(mod_v >> 1)){
         t += mod_v;
+    }
+    if(t > (mod_v >> 1)){
+        t -= mod_v;
     }
     *(int64_t*)des = t;
 }

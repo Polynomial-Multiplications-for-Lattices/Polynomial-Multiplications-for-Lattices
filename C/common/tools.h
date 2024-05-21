@@ -17,13 +17,20 @@ struct compress_profile{
     size_t merged_layers[16];
 };
 
+// This structure
 struct commutative_ring{
+    // sizeZ is refers to the size in bytes of an element in the ring.
     size_t sizeZ;
-    void (*memberZ)(void*, void*);
-    void (*addZ)(void*, void*, void*);
-    void (*subZ)(void*, void*, void*);
-    void (*mulZ)(void*, void*, void*);
-    void (*expZ)(void*, void*, size_t);
+    // memberZ maps *src to its representative in the ring and store the result in des.
+    void (*memberZ)(void *des, void *src);
+    // addZ adds up *src1 and *src2, and stores the result in des.
+    void (*addZ)(void *des, void *src1, void *src2);
+    // subZ subtract *src2 from *src1, and stores the result in des.
+    void (*subZ)(void *des, void *src1, void *src2);
+    // mulZ multiplies *src1 and *src2, and stores the result in des.
+    void (*mulZ)(void *des, void *src1, void *src2);
+    // expZ computes (*src)^e, and stores the result in des.
+    void (*expZ)(void *des, void *src, size_t e);
 };
 
 // ================================
