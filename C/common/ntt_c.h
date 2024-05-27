@@ -7,6 +7,8 @@
 // Butterfly operations.
 
 // Cooley-Tukey butterfly.
+// This function computes (src[indx_a] + (*twiddle) src[indx_b], src[indx_a] - (*twiddle) src[indx_b])
+// and stores the result to src + indx_a and src + indx_b.
 void CT_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
@@ -15,6 +17,8 @@ void CT_butterfly(
     );
 
 // Gentleman-Sande butterfly.
+// This function computes (src[indx_a] + src[indx_b], (src[indx_a] - src[indx_b]) (*twiddle) )
+// and stores the result to src + indx_a and src + indx_b.
 void GS_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
@@ -23,6 +27,9 @@ void GS_butterfly(
     );
 
 // ================================
+// Core operations computing one layer of butterflies.
+
+// This function computes the level-th layer of Cooley--Tukey butterflies in the NTT.
 void CT_NTT_core(
     void *src,
     size_t level,
@@ -31,6 +38,7 @@ void CT_NTT_core(
     struct ring ring
     );
 
+// This function computes the level-th layer of Cooley--Tukey butterflies in the iNTT.
 void CT_iNTT_core(
     void *src,
     size_t level,
@@ -39,6 +47,7 @@ void CT_iNTT_core(
     struct ring ring
     );
 
+// This function computes the level-th layer of Gentleman--Sande butterflies in the iNTT.
 void GS_iNTT_core(
     void *src,
     size_t level,
@@ -48,6 +57,8 @@ void GS_iNTT_core(
     );
 
 // ================================
+// NTT computations without layer-merging.
+
 void CT_NTT(
     void *src,
     void *_root_table,
