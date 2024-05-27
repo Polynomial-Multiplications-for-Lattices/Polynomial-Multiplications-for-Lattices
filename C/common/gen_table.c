@@ -1,5 +1,6 @@
 
 #include <memory.h>
+#include <sys/types.h>
 
 #include "tools.h"
 #include "gen_table.h"
