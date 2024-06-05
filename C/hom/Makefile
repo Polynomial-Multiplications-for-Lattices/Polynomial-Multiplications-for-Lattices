@@ -1,7 +1,7 @@
 
 CC = gcc
 
-CFLAGS += -O0 -Wall -Wunused -Wpedantic -Wno-pointer-arith
+CFLAGS += -O0 -Wall -Wunused -Wpedantic -Wno-pointer-arith -Wsign-compare
 
 COMMON_PATH = ../common
 
