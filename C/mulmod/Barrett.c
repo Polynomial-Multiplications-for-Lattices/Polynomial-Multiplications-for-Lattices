@@ -11,10 +11,10 @@
 // ================
 // This file demonstrates signed Barrett multiplication.
 // Let a and b be the operands that we wish to multiply, Q be the modulus, and R > Q be
-// the arithmetic precision.
+// the size of the arithmetic.
 // Barrett multiplication computes a value that is reasonably close to a b mod^+- Q
-// by approximating the quotient a b / Q and subtract approx(a b / Q) Q from a b.
-// As long as approx(a b / Q) is close to a b / Q, |a b - approx(a b / Q) Q| < R / 2.
+// by approximating the quotient a b / Q and subtract it from a b.
+// As long as the approximation is close to a b / Q, the absolute value of the result is smaller than R / 2.
 
 // ================
 // Theory.

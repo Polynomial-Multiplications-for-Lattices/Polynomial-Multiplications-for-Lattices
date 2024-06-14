@@ -9,20 +9,22 @@
 #include "tools.h"
 
 // ================
-// This file demonstrates accumulative variant of the signed Montgomery multiplication.
+// This file demonstrates the accumulative variant of the signed Montgomery multiplication.
 // Let a and b be the operands that we wish to multiply, Q be the modulus, and R > Q be
-// the arithmetic precision.
+// the size of the arithmetic.
 // Montgomery multiplication computes a value that is equivalent to a b R^(-1) mod^+- Q.
 // If b is known, we replace it with b R mod^+- Q and then Montgomery multiplication computes
 // a value that is equivalent to a b mod^+- Q.
 
 // ================
 // Theory.
-// Observe that a b + (- a b Q^(-1) mod^+- R) Q is equivalent to 0 modulo R and equivalent
-// to a b modulo Q, (a b + ( - a b Q^(-1) mod^+- R ) Q ) / R is an integer that is equivalent
-// to a b R^(-1) mod^+- Q.
+// Observe that a b + (- a b Q^(-1) mod^+- R) Q is
+// equivalent to 0 modulo R and
+// equivalent to a b modulo Q,
+// (a b + ( - a b Q^(-1) mod^+- R ) Q ) / R is an integer that is
+// equivalent to a b R^(-1) mod^+- Q.
 // It remains to show that (a b + ( - a b Q^(-1) mod^+- R ) Q ) / R is reduced.
-// Taking the absolute value yields Q / 2 + |a b| / R.
+// Taking the absolute value yields the upper bound Q / 2 + |a b| / R.
 // If |b| > Q /2, we have Q / 2 (1 + |a| / R).
 
 // R = 2^32 below
@@ -93,10 +95,14 @@ int32_t montgomery_acc_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
     int64_t prod;
     int32_t lo;
 
+    // prod = a * b
     prod = mullong(a, b);
+    // lo = a * b * Qprime mod^+- R
     lo = mullo(prod, qprime);
+    // prod = a * b + (a * b * Qprime mod^+- R) * Q
     prod += mullong(lo, q);
 
+    // prod = (a * b + (a * b * Qprime mod^+- R) Q) / R
     return gethi(prod);
 
 }
@@ -112,17 +118,25 @@ int main(void){
 
     for(size_t i = 0; i < NTESTS; i++){
 
+        // Generate random elements in Z_Q.
         t = rand() % Q;
         coeff_ring.memberZ(&a, &t);
         t = rand() % Q;
         coeff_ring.memberZ(&b, &t);
 
+        // Compute the product of a and b modulo Q.
         coeff_ring.mulZ(&ref, &a, &b);
 
+        // Compute a value equivalent to the product of a and b with the accumulative variant of
+        // Montgomery multiplication.
         res = montgomery_acc_mul(a, b, q, qprime);
 
+        // Map the value to Z_Q.
+        // Notice that this step is needed only when we want the canonical representations of the
+        // values.
         coeff_ring.mulZ(&res, &res, &rmodq);
 
+        // Compare the resulting values.
         assert(ref == res);
 
     }

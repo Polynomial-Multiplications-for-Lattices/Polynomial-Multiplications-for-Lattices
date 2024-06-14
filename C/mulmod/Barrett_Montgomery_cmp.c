@@ -9,7 +9,26 @@
 #include "tools.h"
 
 // ================
+// This file demonstrates that Barrett multiplication and the accumulative variant of Montgomery
+// multiplication compute the same thing with careful choices of integer approximations.
+
+// ================
 // Theory.
+// Let a and b be the operands that we wish to multiply, Q be the modulus, R > Q be
+// the size of the arithmetic, and approx_0 and approx_1 be integer approximations.
+// We denote mod^approx_0 and mod^approx_1 the corresponding modular reduction defined by:
+// for all z in Z, z mod^approx_0 Q = z - approx_0(z / Q) Q
+//                 z mod^apporx_1 Q = z - approx_1(z / Q) Q
+// Barrett--Montgomery correspondence states the following:
+// a b - approx_1( a approx_0(b R / Q) / R ) Q =
+// ( a (b R mod^approx_0 Q) + (a (b R mod^approx_0 Q) Qprime mod^approx_1 R ) Q ) / R.
+// We have Barrett multiplication on the left-hand side and the accumulative variant of Montgomery multiplication
+// on the right-hand side if we choose
+// approx_0 = approx_1 = round.
+// We test with this case, but the identity holds for arbitrary integer approximations.
+
+// ================
+// Proof.
 
 // R = 2^32 below
 #define Q 8380417
@@ -101,10 +120,14 @@ int32_t barrett_mul(int32_t a, int32_t b, int32_t q, int32_t rmodq, int32_t qpri
     int32_t lo, hi;
     int32_t bhi;
 
+    // lo = a * b mod^+- R
     lo = a * b;
+    // bhi = round(b R / Q)
     bhi = get_barrett_hi(b, rmodq, qprime);
+    // hi = round(a * round(b R / Q) / R)
     hi = mulhir(a, bhi);
 
+    // lo = (a * b mod^+- R) - round(a * round(b R / Q) / R) * Q
     return lo - hi * q;
 
 }
@@ -115,10 +138,14 @@ int32_t montgomery_acc_mul(int32_t a, int32_t b, int32_t q, int32_t qprime){
     int64_t prod;
     int32_t lo;
 
+    // prod = a * b
     prod = mullong(a, b);
+    // lo = a * b * Qprime mod^+- R
     lo = mullo(prod, qprime);
+    // prod = a * b + (a * b * Qprime mod^+- R) * Q
     prod += mullong(lo, q);
 
+    // prod = (a * b + (a * b * Qprime mod^+- R) Q) / R
     return gethi(prod);
 
 }
@@ -134,14 +161,18 @@ int main(void){
 
     for(size_t i = 0; i < NTESTS; i++){
 
+        // Generate random elements in Z_Q.
         t = rand() % Q;
         coeff_ring.memberZ(&a, &t);
         t = rand() % Q;
         coeff_ring.memberZ(&b, &t);
 
+        // Precompute b R mod^+- Q.
         coeff_ring.mulZ(&t, &b, &rmodq);
 
+        // Call Barrett multiplication.
         res_barrett = barrett_mul(a, b, q, rmodq, qprime);
+        // Call the accumulative variant of Montgomery multiplication.
         res_montgomery = montgomery_acc_mul(a, t, q, qprime);
 
         // Compare if the results of Barrett and Montgomery multiplications are the same.
