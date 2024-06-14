@@ -9,12 +9,20 @@
 #include "tools.h"
 #include "naive_mult.h"
 
+// ================
+// This program demonstrate 2-layer Karatsuba with symmetric inputs.
+// We compute the product of two size-256 polynomials in Z_{2^32}[x].
+
+// ================
+// Optimization guide.
+
+// ================
+// Applications to lattice-based cryptosystems.
+
 #define ARRAY_N 256
 
-// Q = 1, 2, 4, ..., 2^29
-#define Q (1 << 29)
-
-int32_t mod = Q;
+// ================
+// Z_{2^32}
 
 void memberZ(void *des, void *src){
     *(int32_t*)des = *(int32_t*)src;
@@ -57,12 +65,14 @@ struct ring coeff_ring = {
     .expZ = expZ
 };
 
-// Multiply two size-64 polynomials in R[x] / (x^64 + 1) via
-// R[x] / (x^64 + 1)
+// ================
+
+// Multiply two size-64 polynomials in Z_{2^32}[x] / (x^64 + 1) via
+// Z_{2^32}[x] / (x^64 + 1)
 // to
-// (R[y] / (y^16 + 1)) / (x^4 - y)
+// (Z_{2^32}[y] / (y^16 + 1)) / (x^4 - y)
 // to
-// (R[y] / (y^16 + 1)) / (x^7) (2 layers of Karatsuba)
+// (Z_{2^32}[y] / (y^16 + 1)) / (x^7) (2 layers of Karatsuba)
 static
 void negacyclic_Karatsuba_striding(int32_t *des, const int32_t *src1, const int32_t *src2, size_t len){
 
@@ -189,32 +199,21 @@ int main(void){
     int32_t poly1[ARRAY_N], poly2[ARRAY_N];
     int32_t ref[ARRAY_N], res[ARRAY_N];
 
-    int32_t t;
     int32_t twiddle;
 
     for(size_t i = 0; i < ARRAY_N; i++){
-        t = rand();
-        coeff_ring.memberZ(poly1 + i, &t);
-        t = rand();
-        coeff_ring.memberZ(poly2 + i, &t);
+        poly1[i] = rand();
+        poly2[i] = rand();
     }
 
     twiddle = -1;
     // Compute the product in Z_{2^32}[x].
     naive_mulR(ref, poly1, poly2, ARRAY_N, &twiddle, coeff_ring);
-    // Reduce from Z_{2^32} to Z_Q.
-    for(size_t i = 0; i < ARRAY_N; i++){
-        cmod_int32(ref + i, ref + i, &mod);
-    }
 
-    // Compute the product in Z_{2^32} [x] / (x^ARRAY_N + 1)
-    // via striding followed by two layers of Karatsuba.
+    // Compute the product in Z_{2^32} [x] / (x^ARRAY_N + 1) via striding followed by two layers of Karatsuba.
     negacyclic_Karatsuba_striding(res, poly1, poly2, ARRAY_N);
-    // Reduce from Z_{2^32} to Z_Q.
-    for(size_t i = 0; i < ARRAY_N; i++){
-        cmod_int32(res + i, res + i, &mod);
-    }
 
+    // Test for correctness.
     for(size_t i = 0; i < ARRAY_N; i++){
         assert(ref[i] == res[i]);
     }

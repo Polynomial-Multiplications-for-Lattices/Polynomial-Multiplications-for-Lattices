@@ -12,7 +12,7 @@
 
 // ================
 // This file demonstrate the correctness of Schoenhage + Cooley--Tukey
-// for Z_Q[x] / (x^ARRAY_N - 1) with Q = 1, 2, 4, ..., 2^27.
+// for Z_Q[x] / (x^256 - 1) with Q = 1, 2, 4, ..., 2^27.
 
 // ================
 // Optimization guide.
@@ -23,10 +23,13 @@
    Change them into negacyclic shifts.
 
 2. After applying Schoenhage and Cooley--Tukey, the remaining computing tasks are
-   32 polynomial multiplications in Z_{32 Q}[x] / (x^INNER_N + 1).
+   32 polynomial multiplications in Z_{32 Q}[x] / (x^16 + 1).
    Design fast computations for them.
 
 */
+
+// ================
+// Applications to lattice-based cryptosystems.
 
 #define ARRAY_N 256
 #define INNER_N 16

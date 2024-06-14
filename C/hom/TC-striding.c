@@ -28,6 +28,9 @@
 
 */
 
+// ================
+// Applications to lattice-based cryptosystems.
+
 #define ARRAY_N 256
 
 // Q = 1, 2, 4, ..., 2^29

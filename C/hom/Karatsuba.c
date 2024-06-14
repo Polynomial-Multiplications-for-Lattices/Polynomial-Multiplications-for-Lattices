@@ -21,6 +21,9 @@
 
 */
 
+// ================
+// Applications to lattice-based cryptosystems.
+
 #define ARRAY_N 96
 
 // ================
@@ -138,7 +141,6 @@ int main(void){
         src1[i] = rand();
         src2[i] = rand();
     }
-    src1[ARRAY_N - 1] = src2[ARRAY_N - 1] = 0;
 
     // Compute the reference.
     naive_mul_long(ref, src1, src2, ARRAY_N, coeff_ring);

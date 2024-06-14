@@ -29,6 +29,9 @@
 
 */
 
+// ================
+// Applications to lattice-based cryptosystems.
+
 #define ARRAY_N 256
 #define INNER_N 16
 

@@ -23,6 +23,9 @@
 
 */
 
+// ================
+// Applications to lattice-based cryptosystems.
+
 #define ARRAY_N 512
 #define NTT_N 512
 #define LOGNTT_N 9

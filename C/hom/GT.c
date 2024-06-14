@@ -11,14 +11,6 @@
 #include "gen_table.h"
 #include "ntt_c.h"
 
-/*
-
-TODO:
-
-Apply Cooley--Tukey FFT to the radix-2 part.
-
-*/
-
 // ================
 // This file demonstrates the isomorphism Z_Q[x] / (x^1536 - 1) \cong
 // Z_Q[z] / (z^3 - 1) \otimes Z_Q[y] / (y^512 - 1).
@@ -28,9 +20,12 @@ Apply Cooley--Tukey FFT to the radix-2 part.
 
 /*
 
-TBA
+1. Apply radix-2 Cooley--Tukey FFT to Z_Q[y] / (y^512 - 1).
 
 */
+
+// ================
+// Applications to lattice-based cryptosystems.
 
 #define ARRAY_N 1536
 
@@ -75,30 +70,30 @@ struct ring coeff_ring = {
 
 void memberZ_convol(void *des, void *src){
 
-    size_t size = sizeof(int16_t);
+    size_t size = coeff_ring.sizeZ;
 
     for(size_t i = 0; i < 3; i++){
-        cmod_int16(des + i * size, src + i * size, &mod);
+        coeff_ring.memberZ(des + i * size, src + i * size);
     }
 
 }
 
 void addZ_convol(void *des, void *src1, void *src2){
 
-    size_t size = sizeof(int16_t);
+    size_t size = coeff_ring.sizeZ;
 
     for(size_t i = 0; i < 3; i++){
-        addmod_int16(des + i * size, src1 + i * size, src2 + i * size, &mod);
+        coeff_ring.addZ(des + i * size, src1 + i * size, src2 + i * size);
     }
 
 }
 
 void subZ_convol(void *des, void *src1, void *src2){
 
-    size_t size = sizeof(int16_t);
+    size_t size = coeff_ring.sizeZ;
 
     for(size_t i = 0; i < 3; i++){
-        submod_int16(des + i * size, src1 + i * size, src2 + i * size, &mod);
+        coeff_ring.subZ(des + i * size, src1 + i * size, src2 + i * size);
     }
 
 }
@@ -107,8 +102,7 @@ void mulZ_convol(void *des, void *src1, void *src2){
 
     size_t twiddle = 1;
 
-    naive_mulR(des,
-        src1, src2, 3, &twiddle, coeff_ring);
+    naive_mulR(des, src1, src2, 3, &twiddle, coeff_ring);
 
 }
 

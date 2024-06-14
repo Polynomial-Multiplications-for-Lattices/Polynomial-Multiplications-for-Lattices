@@ -37,6 +37,9 @@ Add Toeplitz matrix-vector product derivation from an algebra homomorphism.
 
 */
 
+// ================
+// Applications to lattice-based cryptosystems.
+
 // Q = 1, 2, 4, ..., 2^29
 #define Q (1 << 29)
 
