@@ -78,7 +78,7 @@ int32_t streamlined_iNTT_table[NTT_N - 1];
 
 int32_t streamlined_twiddle_table[(NTT_N - 1)];
 
-struct compress_profile profile;
+
 
 // ================
 // Tables of squares and square roots.
@@ -132,9 +132,10 @@ int main(void){
 // ================
 // Specify the layer-merging strategy.
 
-    profile.array_n = ARRAY_N;
-    profile.ntt_n = NTT_N;
-    profile.log_ntt_n = LOGNTT_N;
+    struct compress_profile profile = {
+        ARRAY_N, NTT_N, LOGNTT_N
+    };
+
 
     profile.compressed_layers = LOGNTT_N;
     for(size_t i = 0; i < profile.compressed_layers; i++){
@@ -154,9 +155,9 @@ int main(void){
 // Apply Cooley--Tukey FFT.
 
     compressed_CT_NTT(poly1,
-        0, LOGNTT_N - 1, streamlined_twiddle_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
     compressed_CT_NTT(poly2,
-        0, LOGNTT_N - 1, streamlined_twiddle_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
 
 // ================
 
@@ -175,7 +176,7 @@ int main(void){
 // Apply the inverse of Cooley--Tukey FFT.
 
     compressed_GS_iNTT(res,
-        0, LOGNTT_N - 1, streamlined_twiddle_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
 
 // ================
 // Multiply the scale to the reference.

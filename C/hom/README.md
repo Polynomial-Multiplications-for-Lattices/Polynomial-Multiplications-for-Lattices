@@ -3,7 +3,7 @@
 
 - `DWT.c`: This file demonstrates Cooley--Tukey FFT for discrete weighted transform.
     - Assumed knowledge: Chinese remainder theorem for polynomial rings.
-    - References: [CT65], [CF94].
+    - References: [CT65], [GS66], [CF94].
     - Additional references: [Pol71].
     - Applications: [CHK+21], [ACC+22].
 - `FNT.c`: This file demonstrates Fermat number transform.

@@ -210,7 +210,7 @@ int main(void){
     // Specify the layer-merging strategy.
     // For simplicity, we compute one layer at a time.
     struct compress_profile profile = {
-    32, 32, 5, 5, {1, 1, 1, 1, 1}
+        32, 32, 5, 5, {1, 1, 1, 1, 1}
     };
 
     // Initialize constants for generating twiddle factors.
