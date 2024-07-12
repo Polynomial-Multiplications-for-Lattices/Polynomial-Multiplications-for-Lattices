@@ -67,7 +67,6 @@
 
 // ARRAY_N must be even.
 #define ARRAY_N 192
-// #define ARRAY_N 256
 
 // ================
 // Z_{2^32}

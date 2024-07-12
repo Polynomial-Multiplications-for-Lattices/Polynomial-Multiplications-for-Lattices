@@ -15,21 +15,87 @@
 
 // ================
 // Theory.
+// Given two size-n polynomials in R[x], we wish to compute their product in R[x].
+// For simplicity, we illustrate the idea when n is even.
+// Karatsuba converts the computing task into three polynomial multiplications with input size n/2.
+// We illustrate below with the smallest example.
 
 // ================
-// A small example.
+// The simplest case.
+// Consider the case n = 2, we wish to compute (a0 + a1 x) (b0 + b1 x) in R[x].
+// For a0 + a1 x, we form the following terms:
+//   1. a0
+//   2. a0 + a1
+//   3. a1
+// in R.
+// Term 1. has x-degree 0, term 2. has x-degree 1, and term 3. has x-degree 2. We will later justify this.
+// For b0 + b1 x, we also form the similar terms and compute the following products:
+//   1. a0 b0
+//   2. (a0 + a1) (b0 + b1)
+//   3. a1 b1
+// in R.
+// Now, we subtract terms 1. and 3. from 2. and denote the results as follows:
+//   1. c0 = a0 b0
+//   2. c1 = (a0 + a1) (b0 + b1) - a0 b0
+//   3. c2 = a1 b1
+// and find c0 + c1 x + c2 x^2 = (a0 + a1 x) (b0 + b1 x) in R[x].
+// This is the reason why we associate the x-degrees to each of the terms in the beginning of Karatsuba.
+// The association of the x-degrees plays an important role when n is greater than 2 as illustrated in the next example.
+
+// ================
+// Another example.
+// Goal: compute (a0 + a1 x + a2 x^2 + a3 x^3) (b0 + b1 x + b2 x^2 + b3 x^3) in R[x].
+// For a0 + a1 x + a2 x^2 + a3 x^3), we form the following
+//   1. a0 + a1 x
+//   2. (a0 + a2) + (a1 + a3) x
+//   3. a2 + a3 x
+// in R[x]
+// where term 1. has x-degree 0, term 2. has x-degree 2, and term 3. has x-degree 4.
+// We also form the similar terms for b0 + b1 x + b2 x^2 + b3 x^3 and compute the following:
+//   1. (a0 + a1 x) (b0 + b1 x)
+//   2. ((a0 + a2) + (a1 + a3) x) ((b0 + b2) + (b1 + b3) x)
+//   3. (a2 + a3 x) (b2 + b3 x)
+// in R[x].
+// Next, we subtract terms 1. and 3. from 2. as before and denote the results as follows:
+//   1. c0 + c1 x + c0' x^2 = (a0 + a1 x) (b0 + b1 x)
+//   2. c2 + c3 x + c2' x^2 = ((a0 + a2) + (a1 + a3) x) ((b0 + b2) + (b1 + b3) x)
+//                            - (a0 + a1 x) (b0 + b1 x) - (a2 + a3 x) (b2 + b3 x)
+//   3. c4 + c5 x + c4' x^2 = (a2 + a3 x) (b2 + b3 x)
+// in R[x].
+// To combine them into the target size-7 polynomial, we position the terms at the right positions according to
+// the associated x-degree.
+// Graphically, we sum up the following rows:
+//    c0,  c1, c0',   0,   0,   0,   0
+//     0,   0,  c2,  c3, c2',   0,   0
+//     0,   0,   0,   0,  c4,  c5, c4'
+// One can verify that
+// c0 + c1 x + (c2 + c0') x^2 + c3 x^3 + (c4 + c2') x^4 + c5 x^5 + c4' x^6 =
+// (a0 + a1 x + a2 x^2 + a3 x^3) (b0 + b1 x + b2 x^2 + b3 x^3) in R[x].
+
+// ================
+// Algebraic view.
+
+// ================
+// Estimating the cost.
+// For multiplying two size-n polynomials with Karatsuba, we decompose the multiplication task into three
+// polynomial multiplications of size-(n/2). If we continueously apply Karatsuba until n <= 1,
+// eventually, we have 3^log_2 n = n^(log_2 3) multiplications in R.
+// Furthermore, we also need Theta(n^(log_2 3)) number of additions/subtractions.
+// In summary, we need Theta(n^(log_2 3)) number of multiplications and additions/subtractions and R.
 
 // ================
 // Optimization guide.
 /*
 
-1. Instead of computing one layer at a time, try to compute multiple ones and save memory operations.
+1. For the recursive Karatsuba,
+   instead of computing one layer at a time, try to compute multiple layers at once and save memory operations.
 
 */
 
 // ================
 // Applications to lattice-based cryptosystems.
 
+// ARRAY_N must be even.
 #define ARRAY_N 96
 
 // ================

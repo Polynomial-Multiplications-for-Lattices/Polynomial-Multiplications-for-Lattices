@@ -263,7 +263,7 @@ void TC_striding_mul(int32_t *des, int32_t *src1, int32_t *src2, size_t len){
             TC4_buff[j] = res[j][i];
         }
         matrix_vector_mul(TC4_buff, (int32_t*)&iTC4[0][0], TC4_buff, 7);
-        // Multiply by powers of two.
+        // Divide by powers of two.
         res[0][i] = TC4_buff[0];
         res[1][i] = TC4_buff[1] >> 2;
         res[2][i] = TC4_buff[2] >> 3;
