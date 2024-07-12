@@ -16,6 +16,12 @@
 // Z_Q[z] / (z^3 - 1) \otimes Z_Q[y] / (y^512 - 1).
 
 // ================
+// Theory.
+
+// ================
+// A small example.
+
+// ================
 // Optimization guide.
 
 /*

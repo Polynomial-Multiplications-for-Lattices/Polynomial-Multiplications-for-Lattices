@@ -10,8 +10,14 @@
 #include "naive_mult.h"
 
 // ================
-// This program demonstrate recursive Karatsuba with symmetric inputs.
+// This file demonstrates recursive Karatsuba with symmetric inputs.
 // We compute the product of two size-96 polynomials in Z_{2^64}[x].
+
+// ================
+// Theory.
+
+// ================
+// A small example.
 
 // ================
 // Optimization guide.

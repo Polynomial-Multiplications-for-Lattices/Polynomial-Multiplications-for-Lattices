@@ -14,6 +14,12 @@
 // via Toom-4 with the point set {0, 1, -1, 2, -2, 1/2, \infty}.
 
 // ================
+// Theory.
+
+// ================
+// A small example.
+
+// ================
 // Optimization guide.
 /*
 

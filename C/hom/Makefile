@@ -17,7 +17,7 @@ C_SOURCEs =
 SOURCEs = $(ASM_SOURCEs) $(C_SOURCEs) $(COMMON_SOURCE)
 HEADERs = $(ASM_HEADERs) $(C_HEADERs)
 
-all: DWT DWT_merged_layers FNT GT Karatsuba Karatsuba-striding Nussbaumer Schoenhage TC TC-striding Toeplitz-TC
+all: DWT DWT_merged_layers FNT GT Karatsuba Karatsuba-striding Karatsuba-striding_multi-layer Nussbaumer Schoenhage TC TC-striding Toeplitz-TC
 
 DWT: DWT.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
@@ -35,6 +35,9 @@ Karatsuba: Karatsuba.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
 
 Karatsuba-striding: Karatsuba-striding.c $(SOURCEs) $(HEADERs)
+	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
+
+Karatsuba-striding_multi-layer: Karatsuba-striding_multi-layer.c $(SOURCEs) $(HEADERs)
 	$(CC) $(CFLAGS) $(SOURCEs) $< -o $@
 
 Nussbaumer: Nussbaumer.c $(SOURCEs) $(HEADERs)

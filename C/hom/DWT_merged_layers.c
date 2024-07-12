@@ -17,6 +17,39 @@
 
 // ================
 // Optimization guide.
+/*
+
+  There are several things that frequently come to experts' mind for a fixed transformation.
+  This includes the choices of modular multiplications, the precision of arithmetic, the number of memory
+  operations, and the availibity of vectorization. We demonstrate how memory operations are optimized in the literature.
+
+  Recall that a radix-2 Cooley--Tukey FFT is constructed from butterfly operations, each mapping two input coefficients
+  to two output coefficients. The most straightforward way is to load two coefficients from memory,
+  apply a butterfly, store the resulting two coefficients to memory, and iterate through the input coefficeints
+  until all the coefficients are updated. Such memory access pattern frequently arose in the reference implementations
+  where readibility is the main purpose.
+
+  For saving memory operations, we can instead load four coefficients, compute two layers of butterflies,
+  and store the resulting four coefficients to memory. In this way, we save a load-store pair for
+  each coefficients. We call the idea layer-merging. One can certainly extrapolate layer-merging to higher powers of two.
+  The limiting factor is the register pressure.
+
+  Register pressure. Below we summarize the recommanded layer-merging strategies for each of the ISAs/extensions.
+  - Armv7-M:
+    - 14 general purpose registers (32-bit).
+    - 2-layer-merging.
+  - Armv7-M with FPU:
+    - 14 general purpose registers (32-bit).
+    - 32 single-precision floating-point registers.
+    - 3-layer-merging, and 4-layer-merging if unavoidable (instead of two 2-layer-merging).
+  - Armv8-A:
+    - 32 SIMD registers (128-bit).
+    - 4-layer-merging.
+  - x86-64 AVX2:
+    - 16 ymm registers (256-bit).
+    - 3-layer-merging.
+
+*/
 
 // ================
 // Applications to lattice-based cryptosystems.
@@ -120,15 +153,15 @@ int main(void){
     gen_streamlined_DWT_table(streamlined_twiddle_table,
         &scale, &omega, &zeta, profile, 0, coeff_ring);
 
-    assert(memcmp(streamlined_NTT_table, streamlined_twiddle_table, (NTT_N - 1) * sizeof(int16_t)) == 0);
+    assert(memcmp(streamlined_twiddle_table, streamlined_NTT_table, (NTT_N - 1) * sizeof(int16_t)) == 0);
 
 // ================
 // Apply Cooley--Tukey FFT.
 
     compressed_CT_NTT(poly1,
-        0, profile.compressed_layers - 1, streamlined_NTT_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
     compressed_CT_NTT(poly2,
-        0, profile.compressed_layers - 1, streamlined_NTT_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
 
 // ================
 
@@ -143,13 +176,13 @@ int main(void){
     gen_streamlined_DWT_table(streamlined_twiddle_table,
         &scale, &omega, &zeta, profile, 0, coeff_ring);
 
-    assert(memcmp(streamlined_iNTT_table, streamlined_twiddle_table, (NTT_N - 1) * sizeof(int16_t)) == 0);
+    assert(memcmp(streamlined_twiddle_table, streamlined_iNTT_table, (NTT_N - 1) * sizeof(int16_t)) == 0);
 
 // ================
 // Apply Gentleman--Sande FFT.
 
     compressed_GS_iNTT(res,
-        0, profile.compressed_layers - 1, streamlined_iNTT_table, profile, coeff_ring);
+        0, profile.compressed_layers - 1, streamlined_twiddle_table, profile, coeff_ring);
 
 // ================
 // Multiply the scale to reference.

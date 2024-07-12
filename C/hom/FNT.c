@@ -16,6 +16,12 @@
 // polynomials in Z_{65537} [x] / (x^64 - 1).
 
 // ================
+// Theory.
+
+// ================
+// A small example.
+
+// ================
 // Optimization guide.
 /*
 

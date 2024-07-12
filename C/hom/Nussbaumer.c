@@ -12,8 +12,14 @@
 #include "ntt_c.h"
 
 // ================
-// This file demonstrate the correctness of Nussbaumer + Cooley--Tukey
+// This file demonstrates the correctness of Nussbaumer + Cooley--Tukey
 // for Z_Q[x] / (x^256 + 1) for Q = 1, 2, 4, ..., 2^27.
+
+// ================
+// Theory.
+
+// ================
+// A small example.
 
 // ================
 // Optimization guide.

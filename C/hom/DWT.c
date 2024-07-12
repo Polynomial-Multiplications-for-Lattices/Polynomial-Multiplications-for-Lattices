@@ -16,31 +16,38 @@
 // via Cooley--Tukey and Gentlemand--Sande FFT.
 
 // ================
+// Theory.
+
+// ================
+// A small example.
+
+// ================
 // Optimization guide.
 /*
 
-1. Instead of computing one layer at a time, try to compute multiple ones to save memory operations.
+ See the file DWT_merged_layers.c
 
 */
 
 // ================
 // Applications to lattice-based cryptosystems.
-// Generally speaking, DWT is definable for polynomial rings of the form R[x] / (x^n - zeta^n) as long as
-// 1. The positive integer n, encoded as the repeat addition of n copies of the identity of R, is invertible.
+// Generally speaking, DWT is definable for polynomial rings of the form R[x] / (x^n - zeta^n) as long as the following
+// hold:
+// 1. The positive integer n, encoded as the sum of n copies of the identity of R, is invertible.
 // 2. There is a principal n-th root of unity in R. A root of unity w is called a principal n-th root of unity if
 //    Phi_n(w) = 0 in R where Phi_n(x) is the n-th cyclotomic polynomial.
 // For the DWT to be invertible when R is commutative, we also require zeta to be invertible.
-// If R is non-commutative, we additionally ask zeta to commute with all the elements in R (so zeta belongs
+// If R is non-commutative, we ask zeta to commute with all the elements in R (so zeta belongs
 // to the center of R by definition).
 // When R takes the form Z_Q, the definability of an invertible DWT reduces to
 // 1. n | gcd(q_1 - 1, ..., q_d - 1) where Q = prod_i q_i (see [Pol71]).
 // 2. zeta must be invertible in R.
 // We summarize below real-world examples for the power-of-two-size DWTs.
 // 1. Kyber
-//    - Polynomial ring: Z_3329[x] / (x^256 + 1)
+//    - Polynomial ring: Z_3329[x] / (x^256 + 1).
 //    - DWT: Z_3329[x] / (x^256 + 1) with size 128. This transformation is written into the specification of Kyber.
 // 2. Dilithium:
-//    - Polynomial ring: Z_8380417[x] / (x^256 + 1)
+//    - Polynomial ring: Z_8380417[x] / (x^256 + 1).
 //    - DWT: Z_8380417[x] / (x^256 + 1) with size 256. This transformation is written into the specification of Dilithium.
 // 3. Saber:
 //    - Polynomial ring: Z_8192[x] / (x^256 + 1) where one of the input polynomials has small coefficients.
