@@ -50,23 +50,23 @@ int32_t mod = Q;
 // ================
 // Z_{2^32}
 
-void memberZ(void *des, void *src){
+void memberZ(void *des, const void *src){
     *(int32_t*)des = *(int32_t*)src;
 }
 
-void addZ(void *des, void *src1, void *src2){
+void addZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) + (*(int32_t*)src2);
 }
 
-void subZ(void *des, void *src1, void *src2){
+void subZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) - (*(int32_t*)src2);
 }
 
-void mulZ(void *des, void *src1, void *src2){
+void mulZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) * (*(int32_t*)src2);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
 
     int32_t src_v = *(int32_t*)src;
     int32_t tmp_v;
@@ -94,34 +94,34 @@ struct ring coeff_ring = {
 // ================
 // Z_{2^32}[y] / (y^16 + 1)
 
-void memberZ_negacyclic(void *des, void *src){
+void memberZ_negacyclic(void *des, const void *src){
     for(size_t i = 0; i < INNER_N; i++){
         coeff_ring.memberZ(des + i * COEFF_SIZE, src + i * COEFF_SIZE);
     }
 }
 
-void addZ_negacyclic(void *des, void *src1, void *src2){
+void addZ_negacyclic(void *des, const void *src1, const void *src2){
     for(size_t i = 0; i < INNER_N; i++){
         coeff_ring.addZ(des + i * COEFF_SIZE, src1 + i * COEFF_SIZE, src2 + i * COEFF_SIZE);
     }
 }
 
-void subZ_negacyclic(void *des, void *src1, void *src2){
+void subZ_negacyclic(void *des, const void *src1, const void *src2){
     for(size_t i = 0; i < INNER_N; i++){
         coeff_ring.subZ(des + i * COEFF_SIZE, src1 + i * COEFF_SIZE, src2 + i * COEFF_SIZE);
     }
 }
 
-void mulZ_negacyclic(void *des, void *src1, void *src2){
-    int32_t twiddle = -1;
+void mulZ_negacyclic(void *des, const void *src1, const void *src2){
+    const int32_t twiddle = -1;
     naive_mulR(des, src1, src2, INNER_N, &twiddle, coeff_ring);
 }
 
-void expZ_negacyclic(void *des, void *src, size_t e){
+void expZ_negacyclic(void *des, const void *src, size_t e){
 
     int32_t src_v[INNER_N];
     int32_t tmp_v[INNER_N];
-    int32_t twiddle = -1;
+    const int32_t twiddle = -1;
 
     memmove(src_v, src, INNER_N * coeff_ring.sizeZ);
 

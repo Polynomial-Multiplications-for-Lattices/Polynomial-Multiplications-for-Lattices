@@ -42,23 +42,23 @@
 
 int16_t mod = Q;
 
-void memberZ(void *des, void *src){
+void memberZ(void *des, const void *src){
     cmod_int16(des, src, &mod);
 }
 
-void addZ(void *des, void *src1, void *src2){
+void addZ(void *des, const void *src1, const void *src2){
     addmod_int16(des, src1, src2, &mod);
 }
 
-void subZ(void *des, void *src1, void *src2){
+void subZ(void *des, const void *src1, const void *src2){
     submod_int16(des, src1, src2, &mod);
 }
 
-void mulZ(void *des, void *src1, void *src2){
+void mulZ(void *des, const void *src1, const void *src2){
     mulmod_int16(des, src1, src2, &mod);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
     expmod_int16(des, src, e, &mod);
 }
 
@@ -74,7 +74,7 @@ struct ring coeff_ring = {
 // ================
 // Z_Q[z] / (z^3 - 1)
 
-void memberZ_convol(void *des, void *src){
+void memberZ_convol(void *des, const void *src){
 
     size_t size = coeff_ring.sizeZ;
 
@@ -84,7 +84,7 @@ void memberZ_convol(void *des, void *src){
 
 }
 
-void addZ_convol(void *des, void *src1, void *src2){
+void addZ_convol(void *des, const void *src1, const void *src2){
 
     size_t size = coeff_ring.sizeZ;
 
@@ -94,7 +94,7 @@ void addZ_convol(void *des, void *src1, void *src2){
 
 }
 
-void subZ_convol(void *des, void *src1, void *src2){
+void subZ_convol(void *des, const void *src1, const void *src2){
 
     size_t size = coeff_ring.sizeZ;
 
@@ -104,7 +104,7 @@ void subZ_convol(void *des, void *src1, void *src2){
 
 }
 
-void mulZ_convol(void *des, void *src1, void *src2){
+void mulZ_convol(void *des, const void *src1, const void *src2){
 
     size_t twiddle = 1;
 
@@ -112,7 +112,7 @@ void mulZ_convol(void *des, void *src1, void *src2){
 
 }
 
-void expZ_convol(void *des, void *src, size_t e){
+void expZ_convol(void *des, const void *src, size_t e){
     return;
 }
 

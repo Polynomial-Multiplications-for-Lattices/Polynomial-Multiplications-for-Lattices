@@ -6,7 +6,7 @@
 // ================================
 // Candidates for memberZ.
 
-void cmod_int16(void *des, void *src, void *mod){
+void cmod_int16(void *des, const void *src, const void *mod){
     int16_t mod_v = *(int16_t*)mod;
     int16_t t = (*(int16_t*)src) % mod_v;
     if(t < -(mod_v >> 1)){
@@ -18,7 +18,7 @@ void cmod_int16(void *des, void *src, void *mod){
     *(int16_t*)des = t;
 }
 
-void cmod_int32(void *des, void *src, void *mod){
+void cmod_int32(void *des, const void *src, const void *mod){
     int32_t mod_v = *(int32_t*)mod;
     int32_t t = (*(int32_t*)src) % mod_v;
     if(t < -(mod_v >> 1)){
@@ -30,7 +30,7 @@ void cmod_int32(void *des, void *src, void *mod){
     *(int32_t*)des = t;
 }
 
-void cmod_int64(void *des, void *src, void *mod){
+void cmod_int64(void *des, const void *src, const void *mod){
     int64_t mod_v = *(int64_t*)mod;
     int64_t t = (*(int64_t*)src) % mod_v;
     if(t < -(mod_v >> 1)){
@@ -45,7 +45,7 @@ void cmod_int64(void *des, void *src, void *mod){
 // ================================
 // Candidates for addZ.
 
-void addmod_int16(void *des, void *src1, void *src2, void *mod){
+void addmod_int16(void *des, const void *src1, const void *src2, const void *mod){
 
     int32_t tmp_v, mod_v, des_v;
 
@@ -58,7 +58,7 @@ void addmod_int16(void *des, void *src1, void *src2, void *mod){
 
 }
 
-void addmod_int32(void *des, void *src1, void *src2, void *mod){
+void addmod_int32(void *des, const void *src1, const void *src2, const void *mod){
 
     int64_t tmp_v, mod_v, des_v;
 
@@ -74,7 +74,7 @@ void addmod_int32(void *des, void *src1, void *src2, void *mod){
 // ================================
 // Candidates for subZ.
 
-void submod_int16(void *des, void *src1, void *src2, void *mod){
+void submod_int16(void *des, const void *src1, const void *src2, const void *mod){
 
     int32_t tmp_v, mod_v, des_v;
 
@@ -87,7 +87,7 @@ void submod_int16(void *des, void *src1, void *src2, void *mod){
 
 }
 
-void submod_int32(void *des, void *src1, void *src2, void *mod){
+void submod_int32(void *des, const void *src1, const void *src2, const void *mod){
 
     int64_t tmp_v, mod_v, des_v;
 
@@ -103,7 +103,7 @@ void submod_int32(void *des, void *src1, void *src2, void *mod){
 // ================================
 // Candidates for mulZ.
 
-void mulmod_int16(void *des, void *src1, void *src2, void *mod){
+void mulmod_int16(void *des, const void *src1, const void *src2, const void *mod){
 
     int32_t tmp_v, mod_v, des_v;
 
@@ -116,7 +116,7 @@ void mulmod_int16(void *des, void *src1, void *src2, void *mod){
 
 }
 
-void mulmod_int32(void *des, void *src1, void *src2, void *mod){
+void mulmod_int32(void *des, const void *src1, const void *src2, const void *mod){
 
     int64_t tmp_v, mod_v, des_v;
 
@@ -132,7 +132,7 @@ void mulmod_int32(void *des, void *src1, void *src2, void *mod){
 // ================================
 // Candidates for expZ.
 
-void expmod_int16(void *des, void *src, size_t e, void *mod){
+void expmod_int16(void *des, const void *src, size_t e, const void *mod){
 
     int16_t src_v = *(int16_t*)src;
     int16_t tmp_v;
@@ -149,7 +149,7 @@ void expmod_int16(void *des, void *src, size_t e, void *mod){
 
 }
 
-void expmod_int32(void *des, void *src, size_t e, void *mod){
+void expmod_int32(void *des, const void *src, size_t e, const void *mod){
 
     int32_t src_v = *(int32_t*)src;
     int32_t tmp_v;

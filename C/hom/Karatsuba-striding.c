@@ -30,9 +30,6 @@
 // This file demonstrates the implementation for f(x) = x^ARRAY_N + 1 with an even ARRAY_N.
 
 // ================
-// Optimization guide.
-
-// ================
 // A small example.
 // Goal: compute (a0 + a1 x + a2 x^2 + a3 x^3) (b0 + b1 x + b2 x^2 + b3 x^3) in R[x] / (x^4 + 1).
 // Map
@@ -63,6 +60,12 @@
 // (a0 + a1 x + a2 x^2 + a3 x^3) (b0 + b1 x + b2 x^2 + b3 x^3) in R[x] / (x^4 + 1).
 
 // ================
+// Algebraic view.
+
+// ================
+// Optimization guide.
+
+// ================
 // Applications to lattice-based cryptosystems.
 
 // ARRAY_N must be even.
@@ -71,23 +74,23 @@
 // ================
 // Z_{2^32}
 
-void memberZ(void *des, void *src){
+void memberZ(void *des, const void *src){
     *(int32_t*)des = *(int32_t*)src;
 }
 
-void addZ(void *des, void *src1, void *src2){
+void addZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) + (*(int32_t*)src2);
 }
 
-void subZ(void *des, void *src1, void *src2){
+void subZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) - (*(int32_t*)src2);
 }
 
-void mulZ(void *des, void *src1, void *src2){
+void mulZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) * (*(int32_t*)src2);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
 
     int32_t src_v = *(int32_t*)src;
     int32_t tmp_v;
@@ -115,15 +118,18 @@ struct ring coeff_ring = {
 // ================
 
 static
-void negacyclic_Karatsuba_striding(int32_t *des, const int32_t *src1, const int32_t *src2, size_t len){
+void negacyclic_Karatsuba_striding_recur(int32_t *des, const int32_t *src1, const int32_t *src2, size_t len, size_t threshold){
+
+    const int32_t twiddle = -1;
+
+    if(len <= threshold){
+        naive_mulR(des, src1, src2, len, &twiddle, coeff_ring);
+        return;
+    }
 
     int32_t src1lo[len / 2], src1hi[len / 2], src1mid[len / 2];
     int32_t src2lo[len / 2], src2hi[len / 2], src2mid[len / 2];
     int32_t reslo[len / 2], reshi[len / 2], resmid[len / 2];
-
-    int32_t twiddle;
-
-    twiddle = -1;
 
     for(size_t i = 0; i < len / 2; i++){
         src1lo[i] = src1[2 * i + 0];
@@ -136,9 +142,9 @@ void negacyclic_Karatsuba_striding(int32_t *des, const int32_t *src1, const int3
         src2mid[i] = src2lo[i] + src2hi[i];
     }
 
-    naive_mulR(reslo, src1lo, src2lo, len / 2, &twiddle, coeff_ring);
-    naive_mulR(reshi, src1hi, src2hi, len / 2, &twiddle, coeff_ring);
-    naive_mulR(resmid, src1mid, src2mid, len / 2, &twiddle, coeff_ring);
+    negacyclic_Karatsuba_striding_recur(reslo, src1lo, src2lo, len / 2, threshold);
+    negacyclic_Karatsuba_striding_recur(reshi, src1hi, src2hi, len / 2, threshold);
+    negacyclic_Karatsuba_striding_recur(resmid, src1mid, src2mid, len / 2, threshold);
 
     for(size_t i = 0; i < len / 2; i++){
         resmid[i] = resmid[i] - reslo[i] - reshi[i];
@@ -162,26 +168,22 @@ int main(void){
     int32_t poly1[ARRAY_N], poly2[ARRAY_N];
     int32_t ref[ARRAY_N], res[ARRAY_N];
 
-    int32_t twiddle;
+    const int32_t twiddle = -1;
 
     for(size_t i = 0; i < ARRAY_N; i++){
         poly1[i] = rand();
         poly2[i] = rand();
     }
 
-    twiddle = -1;
     // Compute the product in Z_{2^32}[x] / (x^ARRAY_N + 1).
     naive_mulR(ref, poly1, poly2, ARRAY_N, &twiddle, coeff_ring);
 
     // Compute the product in Z_{2^32} [x] / (x^ARRAY_N + 1) via striding followed by two layers of Karatsuba.
-    negacyclic_Karatsuba_striding(res, poly1, poly2, ARRAY_N);
+    negacyclic_Karatsuba_striding_recur(res, poly1, poly2, ARRAY_N, 4);
 
     // Test for correctness.
     for(size_t i = 0; i < ARRAY_N; i++){
-        if(ref[i] != res[i]){
-            printf("%4zu: %12d, %12d\n", i, ref[i], res[i]);
-        }
-        // assert(ref[i] == res[i]);
+        assert(ref[i] == res[i]);
     }
 
     printf("Test finished!\n");

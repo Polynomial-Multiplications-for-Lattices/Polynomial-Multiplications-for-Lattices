@@ -77,23 +77,23 @@
 
 int16_t mod = Q;
 
-void memberZ(void *des, void *src){
+void memberZ(void *des, const void *src){
     cmod_int16(des, src, &mod);
 }
 
-void addZ(void *des, void *src1, void *src2){
+void addZ(void *des, const void *src1, const void *src2){
     addmod_int16(des, src1, src2, &mod);
 }
 
-void subZ(void *des, void *src1, void *src2){
+void subZ(void *des, const void *src1, const void *src2){
     submod_int16(des, src1, src2, &mod);
 }
 
-void mulZ(void *des, void *src1, void *src2){
+void mulZ(void *des, const void *src1, const void *src2){
     mulmod_int16(des, src1, src2, &mod);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
     expmod_int16(des, src, e, &mod);
 }
 

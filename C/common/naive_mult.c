@@ -9,8 +9,8 @@
 // where R = ring.
 void naive_mulR(
     void *des,
-    void *src1, void *src2,
-    size_t len, void *twiddle,
+    const void *src1, const void *src2,
+    size_t len, const void *twiddle,
     struct ring ring
     ){
 
@@ -37,7 +37,7 @@ void naive_mulR(
 // Multiplying size-len polynomials stored at src1 and src2 in R[x] where R = ring.
 void naive_mul_long(
     void *des,
-    void *src1, void *src2,
+    const void *src1, const void *src2,
     size_t len,
     struct ring ring
     ){
@@ -60,7 +60,7 @@ void naive_mul_long(
 // Point-wise multiplication of src1[len * jump] by src2[len] over R where R = ring.
 void point_mul(
     void *des,
-    void *src1, void *src2,
+    const void *src1, const void *src2,
     size_t len, size_t jump,
     struct ring ring
     ){

@@ -64,15 +64,15 @@ struct ring {
     // sizeZ is refers to the size in bytes of an element in the ring.
     size_t sizeZ;
     // memberZ maps *src to its representative in the ring and store the result in des.
-    void (*memberZ)(void *des, void *src);
+    void (*memberZ)(void *des, const void *src);
     // addZ adds up *src1 and *src2, and stores the result in des.
-    void (*addZ)(void *des, void *src1, void *src2);
+    void (*addZ)(void *des, const void *src1, const void *src2);
     // subZ subtract *src2 from *src1, and stores the result in des.
-    void (*subZ)(void *des, void *src1, void *src2);
+    void (*subZ)(void *des, const void *src1, const void *src2);
     // mulZ multiplies *src1 and *src2, and stores the result in des.
-    void (*mulZ)(void *des, void *src1, void *src2);
+    void (*mulZ)(void *des, const void *src1, const void *src2);
     // expZ computes (*src)^e, and stores the result in des.
-    void (*expZ)(void *des, void *src, size_t e);
+    void (*expZ)(void *des, const void *src, size_t e);
 };
 
 // ================================
@@ -84,53 +84,53 @@ struct ring {
 
 // This function assumes sizeZ = 2 and maps the element to the representative
 // in the ring Z_{*mod} with signed representation.
-void cmod_int16(void *des, void *src, void *mod);
+void cmod_int16(void *des, const void *src, const void *mod);
 // This function assumes sizeZ = 4 and maps the element to the representative
 // in the ring Z_{*mod} with signed representation.
-void cmod_int32(void *des, void *src, void *mod);
+void cmod_int32(void *des, const void *src, const void *mod);
 // This function assumes sizeZ = 8 and maps the element to the representative
 // in the ring Z_{*mod} with signed representation.
-void cmod_int64(void *des, void *src, void *mod);
+void cmod_int64(void *des, const void *src, const void *mod);
 
 // ================================
 // Candidates for addZ.
 
 // This function assumes sizeZ = 2. It sums *src1 and *src2 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void addmod_int16(void *des, void *src1, void *src2, void *mod);
+void addmod_int16(void *des, const void *src1, const void *src2, const void *mod);
 // This function assumes sizeZ = 4. It sums *src1 and *src2 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void addmod_int32(void *des, void *src1, void *src2, void *mod);
+void addmod_int32(void *des, const void *src1, const void *src2, const void *mod);
 
 // ================================
 // Candidates for subZ.
 
 // This function assumes sizeZ = 2. It subtracts *src2 from *src1 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void submod_int16(void *des, void *src1, void *src2, void *mod);
+void submod_int16(void *des, const void *src1, const void *src2, const void *mod);
 // This function assumes sizeZ = 4. It subtracts *src2 from *src1 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void submod_int32(void *des, void *src1, void *src2, void *mod);
+void submod_int32(void *des, const void *src1, const void *src2, const void *mod);
 
 // ================================
 // Candidates for mulZ.
 
 // This function assumes sizeZ = 2. It multiplies *src1 and *src2 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void mulmod_int16(void *des, void *src1, void *src2, void *mod);
+void mulmod_int16(void *des, const void *src1, const void *src2, const void *mod);
 // This function assumes sizeZ = 4. It multiplies *src1 and *src2 and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void mulmod_int32(void *des, void *src1, void *src2, void *mod);
+void mulmod_int32(void *des, const void *src1, const void *src2, const void *mod);
 
 // ================================
 // Candidates for expZ.
 
 // This function assumes sizeZ = 2. It computes (*src)^e and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void expmod_int16(void *des, void *src, size_t e, void *mod);
+void expmod_int16(void *des, const void *src, size_t e, const void *mod);
 // This function assumes sizeZ = 4. It computes (*src)^e and maps the result to the
 // representative in the ring Z_{*mod} with signed representation.
-void expmod_int32(void *des, void *src, size_t e, void *mod);
+void expmod_int32(void *des, const void *src, size_t e, const void *mod);
 
 // ================================
 // In-place bit-reversal.

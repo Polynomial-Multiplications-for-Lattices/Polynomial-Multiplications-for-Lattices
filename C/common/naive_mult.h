@@ -12,8 +12,8 @@
 // The resulting polynomial is stored at des.
 void naive_mulR(
     void *des,
-    void *src1, void *src2,
-    size_t len, void *twiddle,
+    const void *src1, const void *src2,
+    size_t len, const void *twiddle,
     struct ring ring
     );
 
@@ -21,7 +21,7 @@ void naive_mulR(
 // The resulting polynomial is stored at des.
 void naive_mul_long(
     void *des,
-    void *src1, void *src2,
+    const void *src1, const void *src2,
     size_t len,
     struct ring ring
     );
@@ -32,7 +32,7 @@ void naive_mul_long(
 // The destination contains the same number of elements as src1.
 void point_mul(
     void *des,
-    void *src1, void *src2,
+    const void *src1, const void *src2,
     size_t len, size_t jump,
     struct ring ring
     );

@@ -25,23 +25,23 @@
 // ================
 // Z_{2^32}
 
-void memberZ(void *des, void *src){
+void memberZ(void *des, const void *src){
     *(int32_t*)des = *(int32_t*)src;
 }
 
-void addZ(void *des, void *src1, void *src2){
+void addZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) + (*(int32_t*)src2);
 }
 
-void subZ(void *des, void *src1, void *src2){
+void subZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) - (*(int32_t*)src2);
 }
 
-void mulZ(void *des, void *src1, void *src2){
+void mulZ(void *des, const void *src1, const void *src2){
     *(int32_t*)des = (*(int32_t*)src1) * (*(int32_t*)src2);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
 
     int32_t src_v = *(int32_t*)src;
     int32_t tmp_v;
@@ -216,10 +216,7 @@ int main(void){
 
     // Test for correctness.
     for(size_t i = 0; i < ARRAY_N; i++){
-        if(ref[i] != res[i]){
-            printf("%4zu: %12d, %12d\n", i, ref[i], res[i]);
-        }
-        // assert(ref[i] == res[i]);
+        assert(ref[i] == res[i]);
     }
 
     printf("Test finished!\n");

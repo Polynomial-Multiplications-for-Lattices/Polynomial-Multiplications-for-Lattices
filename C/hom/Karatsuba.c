@@ -11,17 +11,17 @@
 
 // ================
 // This file demonstrates recursive Karatsuba with symmetric inputs.
-// We compute the product of two size-96 polynomials in Z_{2^64}[x].
+// We compute the product of two size-96 polynomials in Z_{2^32}[x].
 
 // ================
 // Theory.
 // Given two size-n polynomials in R[x], we wish to compute their product in R[x].
 // For simplicity, we illustrate the idea when n is even.
 // Karatsuba converts the computing task into three polynomial multiplications with input size n/2.
-// We illustrate below with the smallest example.
+// We illustrate below with the most simple case.
 
 // ================
-// The simplest case.
+// The most simple case.
 // Consider the case n = 2, we wish to compute (a0 + a1 x) (b0 + b1 x) in R[x].
 // For a0 + a1 x, we form the following terms:
 //   1. a0
@@ -99,28 +99,28 @@
 #define ARRAY_N 96
 
 // ================
-// Z_{2^64}
+// Z_{2^32}
 
-void memberZ(void *des, void *src){
-    *(uint64_t*)des = *(uint64_t*)src;
+void memberZ(void *des, const void *src){
+    *(int32_t*)des = *(int32_t*)src;
 }
 
-void addZ(void *des, void *src1, void *src2){
-    *(uint64_t*)des = (*(uint64_t*)src1) + (*(uint64_t*)src2);
+void addZ(void *des, const void *src1, const void *src2){
+    *(int32_t*)des = (*(int32_t*)src1) + (*(int32_t*)src2);
 }
 
-void subZ(void *des, void *src1, void *src2){
-    *(uint64_t*)des = (*(uint64_t*)src1) - (*(uint64_t*)src2);
+void subZ(void *des, const void *src1, const void *src2){
+    *(int32_t*)des = (*(int32_t*)src1) - (*(int32_t*)src2);
 }
 
-void mulZ(void *des, void *src1, void *src2){
-    *(uint64_t*)des = (*(uint64_t*)src1) * (*(uint64_t*)src2);
+void mulZ(void *des, const void *src1, const void *src2){
+    *(int32_t*)des = (*(int32_t*)src1) * (*(int32_t*)src2);
 }
 
-void expZ(void *des, void *src, size_t e){
+void expZ(void *des, const void *src, size_t e){
 
-    uint64_t src_v = *(uint64_t*)src;
-    uint64_t tmp_v;
+    int32_t src_v = *(int32_t*)src;
+    int32_t tmp_v;
 
     tmp_v = 1;
     for(; e; e >>= 1){
@@ -130,11 +130,11 @@ void expZ(void *des, void *src, size_t e){
         src_v = src_v * src_v;
     }
 
-    memmove(des, &tmp_v, sizeof(uint64_t));
+    memmove(des, &tmp_v, sizeof(int32_t));
 }
 
 struct ring coeff_ring = {
-    .sizeZ = sizeof(uint64_t),
+    .sizeZ = sizeof(int32_t),
     .memberZ = memberZ,
     .addZ = addZ,
     .subZ = subZ,
@@ -206,8 +206,8 @@ void karatsuba_recur(void *des, void *src1, void *src2, size_t len, size_t thres
 
 int main(void){
 
-    uint64_t src1[ARRAY_N], src2[ARRAY_N];
-    uint64_t ref[2 * ARRAY_N], res[2 * ARRAY_N];
+    int32_t src1[ARRAY_N], src2[ARRAY_N];
+    int32_t ref[2 * ARRAY_N], res[2 * ARRAY_N];
 
     for(size_t i = 0; i < ARRAY_N; i++){
         src1[i] = rand();
