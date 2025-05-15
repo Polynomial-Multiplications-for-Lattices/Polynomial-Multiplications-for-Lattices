@@ -139,5 +139,15 @@ void expmod_int32(void *des, const void *src, size_t e, const void *mod);
 // See gen_table.c for example usages.
 void bitreverse(void *src, size_t len, size_t size);
 
+#if defined(__x86_64__) || defined(__aarch64__)
+
+// void cmod_int64(void *des, const void *src, const void *mod);
+
+// void addmod_int128(void *des, void *src1, void *src2, void *mod);
+
+#endif
+
+
+
 #endif
 

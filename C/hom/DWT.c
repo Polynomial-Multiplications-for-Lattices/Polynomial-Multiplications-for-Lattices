@@ -161,6 +161,8 @@ int main(void){
     gen_streamlined_DWT_table(streamlined_twiddle_table,
         &scale, &omega, &zeta, profile, 0, coeff_ring);
 
+    //
+
     assert(memcmp(streamlined_NTT_table, streamlined_twiddle_table, (NTT_N - 1) * sizeof(int16_t)) == 0);
 
 // ================

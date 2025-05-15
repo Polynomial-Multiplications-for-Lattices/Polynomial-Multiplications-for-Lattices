@@ -64,6 +64,7 @@ clean:
 	rm -f GT
 	rm -f Karatsuba
 	rm -f Karatsuba-striding
+	rm -f Karatsuba-striding_multi-layer
 	rm -f Nussbaumer
 	rm -f Schoenhage
 	rm -f TC
