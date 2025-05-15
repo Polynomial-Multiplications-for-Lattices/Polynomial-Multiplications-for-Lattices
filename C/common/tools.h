@@ -141,9 +141,11 @@ void bitreverse(void *src, size_t len, size_t size);
 
 #if defined(__x86_64__) || defined(__aarch64__)
 
-// void cmod_int64(void *des, const void *src, const void *mod);
-
-// void addmod_int128(void *des, void *src1, void *src2, void *mod);
+void cmod_int64(void *des, const void *src, const void *mod);
+void addmod_int128(void *des, const void *src1, const void *src2, const void *mod);
+void submod_int128(void *des, const void *src1, const void *src2, const void *mod);
+void mulmod_int64(void *des, const void *src1, const void *src2, const void *mod);
+void expmod_int64(void *des, const void *src, size_t e, const void *mod);
 
 #endif
 

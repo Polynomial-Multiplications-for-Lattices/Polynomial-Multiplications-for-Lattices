@@ -1,5 +1,5 @@
 
-CC = gcc
+CC ?= gcc
 
 CFLAGS += -O0 -Wall -Wunused -Wpedantic -Wno-pointer-arith -Wsign-compare
 

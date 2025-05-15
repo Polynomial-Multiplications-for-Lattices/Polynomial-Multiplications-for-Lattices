@@ -145,7 +145,7 @@ void expmod_int16(void *des, const void *src, size_t e, const void *mod){
         mulmod_int16(&src_v, &src_v, &src_v, mod);
     }
 
-    memcpy(des, &tmp_v, sizeof(int16_t));
+    *(int16_t*)des = tmp_v;
 
 }
 
@@ -162,7 +162,7 @@ void expmod_int32(void *des, const void *src, size_t e, const void *mod){
         mulmod_int32(&src_v, &src_v, &src_v, mod);
     }
 
-    memcpy(des, &tmp_v, sizeof(int32_t));
+    *(int32_t*)des = tmp_v;
 
 }
 
@@ -186,30 +186,78 @@ void bitreverse(void *src, size_t len, size_t size){
 
 #if defined(__x86_64__) || defined(__aarch64__)
 
-// void cmod_int128(void *des, void *src, void *mod){
-//     __int128 mod_v = *(__int128*)mod;
-//     __int128 t = (*(__int128*)src) % mod_v;
-//     if(t >= (mod_v >> 1)){
-//         t -= mod_v;
-//     }
-//     if(t < -(mod_v >> 1)){
-//         t += mod_v;
-//     }
-//     *(__int128*)des = t;
-// }
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 
-// void addmod_int128(void *des, void *src1, void *src2, void *mod){
+void cmod_int128(void *des, const void *src, const void *mod){
+    __extension__ __int128 mod_v = *(__int128*)mod;
+    __extension__ __int128 t = (*(__int128*)src) % mod_v;
+    if(t >= (mod_v >> 1)){
+        t -= mod_v;
+    }
+    if(t < -(mod_v >> 1)){
+        t += mod_v;
+    }
+    *(__int128*)des = t;
+}
 
-//     __int128 tmp_v, mod_v, des_v;
+void addmod_int128(void *des, const void *src1, const void *src2, const void *mod){
 
-//     tmp_v = (__int128)(*(int64_t*)src1) + (__int128)(*(int64_t*)src2);
-//     mod_v = (__int128)(*(int64_t*)mod);
+    __extension__ __int128 tmp_v, mod_v, des_v;
 
-//     cmod_int128(&des_v, &tmp_v, &mod_v);
+    tmp_v = (__int128)(*(int64_t*)src1) + (__int128)(*(int64_t*)src2);
+    mod_v = (__int128)(*(int64_t*)mod);
 
-//     *(int64_t*)des = (int64_t)des_v;
+    cmod_int128(&des_v, &tmp_v, &mod_v);
 
-// }
+    *(int64_t*)des = (int64_t)des_v;
+
+}
+
+void submod_int128(void *des, const void *src1, const void *src2, const void *mod){
+
+    __extension__ __int128 tmp_v, mod_v, des_v;
+
+    tmp_v = (__int128)(*(int64_t*)src1) - (__int128)(*(int64_t*)src2);
+    mod_v = (__int128)(*(int64_t*)mod);
+
+    cmod_int128(&des_v, &tmp_v, &mod_v);
+
+    *(int64_t*)des = (int64_t)des_v;
+
+}
+
+void mulmod_int64(void *des, const void *src1, const void *src2, const void *mod){
+
+    int64_t tmp_v, mod_v, des_v;
+
+    tmp_v = (__int128)(*(int64_t*)src1) * (__int128)(*(int64_t*)src2);
+    mod_v = (__int128)(*(int64_t*)mod);
+
+    cmod_int128(&des_v, &tmp_v, &mod_v);
+
+    *(int64_t*)des = (int64_t)des_v;
+
+}
+
+void expmod_int64(void *des, const void *src, size_t e, const void *mod){
+
+    int64_t src_v = *(int64_t*)src;
+    int64_t tmp_v;
+
+    tmp_v = 1;
+    for(; e; e >>= 1){
+        if(e & 1){
+            mulmod_int64(&tmp_v, &tmp_v, &src_v, mod);
+        }
+        mulmod_int64(&src_v, &src_v, &src_v, mod);
+    }
+
+    *(int64_t*)des = tmp_v;
+
+}
+
+#pragma GCC diagnostic pop
 
 #endif
 
