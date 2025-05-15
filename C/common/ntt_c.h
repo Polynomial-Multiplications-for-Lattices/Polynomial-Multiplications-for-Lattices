@@ -12,7 +12,7 @@
 void CT_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
-    void *twiddle,
+    const void *twiddle,
     struct ring ring
     );
 
@@ -22,7 +22,7 @@ void CT_butterfly(
 void GS_butterfly(
     void *src,
     size_t indx_a, size_t indx_b,
-    void *twiddle,
+    const void *twiddle,
     struct ring ring
     );
 
@@ -33,7 +33,7 @@ void GS_butterfly(
 void CT_NTT_core(
     void *src,
     size_t level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -42,7 +42,7 @@ void CT_NTT_core(
 void CT_iNTT_core(
     void *src,
     size_t level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -51,7 +51,7 @@ void CT_iNTT_core(
 void GS_iNTT_core(
     void *src,
     size_t level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -61,21 +61,21 @@ void GS_iNTT_core(
 
 void CT_NTT(
     void *src,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
 
 void CT_iNTT(
     void *src,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
 
 void GS_iNTT(
     void *src,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -87,7 +87,7 @@ void GS_iNTT(
 void m_layer_CT_butterfly(
     void *src,
     size_t layers, size_t step,
-    void *_root_table,
+    const void *_root_table,
     struct ring ring
     );
 
@@ -95,7 +95,7 @@ void m_layer_CT_butterfly(
 void m_layer_CT_ibutterfly(
     void *src,
     size_t layers, size_t step,
-    void *_root_table,
+    const void *_root_table,
     struct ring ring
     );
 
@@ -103,7 +103,7 @@ void m_layer_CT_ibutterfly(
 void m_layer_GS_ibutterfly(
     void *src,
     size_t layers, size_t step,
-    void *_root_table,
+    const void *_root_table,
     struct ring ring
     );
 
@@ -115,7 +115,7 @@ void m_layer_GS_ibutterfly(
 void compressed_CT_NTT(
     void *src,
     size_t start_level, size_t end_level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -125,7 +125,7 @@ void compressed_CT_NTT(
 void compressed_CT_iNTT(
     void *src,
     size_t start_level, size_t end_level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
@@ -135,7 +135,7 @@ void compressed_CT_iNTT(
 void compressed_GS_iNTT(
     void *src,
     size_t start_level, size_t end_level,
-    void *_root_table,
+    const void *_root_table,
     struct compress_profile _profile,
     struct ring ring
     );
