@@ -288,6 +288,10 @@ void compressed_CT_NTT(
     void *real_root_table;
     size_t *level_indx;
 
+    if(end_level < start_level){
+        return;
+    }
+
     real_start_level = 0;
     for(size_t i = 0; i < start_level; i++){
         real_start_level += (_profile.merged_layers)[i];
@@ -345,6 +349,10 @@ void compressed_CT_iNTT(
     void *real_root_table;
     size_t *level_indx;
 
+    if(end_level < start_level){
+        return;
+    }
+
     real_start_level = 0;
     for(size_t i = 0; i < start_level; i++){
         real_start_level += (_profile.merged_layers)[i];
@@ -390,6 +398,8 @@ void compressed_CT_iNTT(
 
 }
 
+#include <stdio.h>
+
 // ================================
 // iNTT with Gentleman-Sande butterfly.
 // We must use m_layer_GS_ibutterfly here.
@@ -423,6 +433,7 @@ void compressed_GS_iNTT(
     level_indx = (_profile.merged_layers) + end_level;
 
     for(ssize_t level = real_end_level; level >= real_start_level; level -= *(level_indx-- -1) ){
+
 
         step = _profile.array_n >> (level + (*(level_indx)));
 
