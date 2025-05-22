@@ -406,6 +406,10 @@ void compressed_GS_iNTT(
     void *real_root_table;
     size_t *level_indx;
 
+    if(end_level < start_level){
+        return;
+    }
+
     real_start_level = 0;
     for(size_t i = 0; i < start_level; i++){
         real_start_level += (_profile.merged_layers)[i];
