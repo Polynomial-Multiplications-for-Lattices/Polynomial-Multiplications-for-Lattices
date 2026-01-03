@@ -1,6 +1,5 @@
 
 #include <memory.h>
-#include <sys/types.h>
 
 #include "tools.h"
 #include "ntt_c.h"
@@ -147,7 +146,7 @@ void GS_iNTT(
     struct ring ring
     ){
 
-    for(ssize_t i = _profile.log_ntt_n - 1; i >= 0; i--){
+    for(ptrdiff_t i = _profile.log_ntt_n - 1; i >= 0; i--){
         GS_iNTT_core(src, i, _root_table, _profile, ring);
     }
 
@@ -245,7 +244,7 @@ void m_layer_GS_ibutterfly(
     size_t real_count, real_step, twiddle_count, jump;
     void *real_root_table;
 
-    for(ssize_t i = layers - 1; i >= 0; i--){
+    for(ptrdiff_t i = layers - 1; i >= 0; i--){
 
         twiddle_count = 1u << i;
 
@@ -412,7 +411,7 @@ void compressed_GS_iNTT(
     ){
 
     size_t step, offset;
-    ssize_t real_start_level, real_end_level;
+    ptrdiff_t real_start_level, real_end_level;
     void *real_root_table;
     size_t *level_indx;
 
@@ -432,7 +431,7 @@ void compressed_GS_iNTT(
 
     level_indx = (_profile.merged_layers) + end_level;
 
-    for(ssize_t level = real_end_level; level >= real_start_level; level -= *(level_indx-- -1) ){
+    for(ptrdiff_t level = real_end_level; level >= real_start_level; level -= *(level_indx-- -1) ){
 
 
         step = _profile.array_n >> (level + (*(level_indx)));

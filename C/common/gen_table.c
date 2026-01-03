@@ -1,6 +1,5 @@
 
 #include <memory.h>
-#include <sys/types.h>
 
 #include "tools.h"
 #include "gen_table.h"
@@ -48,7 +47,7 @@ void gen_DWT_table(
 
     memcpy(zeta_buff + (_profile.log_ntt_n - 1) * ring.sizeZ, zeta, ring.sizeZ);
 
-    for(ssize_t i = _profile.log_ntt_n - 2; i >= 0; i--){
+    for(ptrdiff_t i = _profile.log_ntt_n - 2; i >= 0; i--){
         ring.expZ(zeta_buff + i * ring.sizeZ, zeta_buff + (i + 1) * ring.sizeZ, 2);
     }
 
