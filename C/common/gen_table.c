@@ -126,7 +126,7 @@ void gen_streamlined_DWT_table(
                 }
             }
         }
-    start_level += (_profile.merged_layers)[i];
+        start_level += (_profile.merged_layers)[i];
     }
 
 }
