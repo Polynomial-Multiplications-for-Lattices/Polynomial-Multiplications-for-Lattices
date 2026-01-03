@@ -187,7 +187,7 @@ int main(void){
 // ================
 // Multiply the scale to reference.
 
-    scale = 512;
+    scale = NTT_N;
     for(size_t i = 0; i < ARRAY_N; i++){
         coeff_ring.mulZ(ref + i, ref + i, &scale);
     }
