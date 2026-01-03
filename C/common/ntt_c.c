@@ -48,10 +48,10 @@ void CT_NTT_core(
     ){
 
     size_t step;
-    void *real_root_table;
+    const void *real_root_table;
 
     step = (_profile.array_n) >> (level + 1);
-    real_root_table = (void*)_root_table + ((1u << level) - 1) * ring.sizeZ;
+    real_root_table = _root_table + ((1u << level) - 1) * ring.sizeZ;
 
     for(size_t i = 0; i < _profile.array_n; i += 2 * step){
         for(size_t j = 0; j < step; j++){
@@ -72,10 +72,10 @@ void CT_iNTT_core(
     ){
 
     size_t step;
-    void *real_root_table;
+    const void *real_root_table;
 
     step = 1u << level;
-    real_root_table = (void*)_root_table + ((1u << level) - 1) * ring.sizeZ;
+    real_root_table = _root_table + ((1u << level) - 1) * ring.sizeZ;
 
     for(size_t i = 0; i < step; i++){
         for(size_t j = 0; j < _profile.array_n; j += 2 * step){
@@ -96,10 +96,10 @@ void GS_iNTT_core(
     ){
 
     size_t step;
-    void *real_root_table;
+    const void *real_root_table;
 
     step = (_profile.array_n) >> (level + 1);
-    real_root_table = (void*)_root_table + ((1U << level) - 1) * ring.sizeZ;
+    real_root_table = _root_table + ((1U << level) - 1) * ring.sizeZ;
 
     for(size_t i = 0; i < _profile.array_n; i += 2 * step){
         for(size_t j = 0; j < step; j++){
@@ -164,7 +164,7 @@ void m_layer_CT_butterfly(
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
-    void *real_root_table;
+    const void *real_root_table;
 
     for(size_t i = 0; i < layers; i++){
 
@@ -174,7 +174,7 @@ void m_layer_CT_butterfly(
 
         jump = step << (layers - i);
 
-        real_root_table = (void*)_root_table + ((1u << i) - 1) * ring.sizeZ;
+        real_root_table = _root_table + ((1u << i) - 1) * ring.sizeZ;
 
         real_step = step << (layers - 1 - i);
 
@@ -203,7 +203,7 @@ void m_layer_CT_ibutterfly(
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
-    void *real_root_table;
+    const void *real_root_table;
 
     for(size_t i = 0; i < layers; i++){
 
@@ -213,7 +213,7 @@ void m_layer_CT_ibutterfly(
 
         jump = step << (i + 1);
 
-        real_root_table = (void*)_root_table + ((1u << i) - 1) * ring.sizeZ;
+        real_root_table = _root_table + ((1u << i) - 1) * ring.sizeZ;
 
         real_step = step << i;
 
@@ -242,7 +242,7 @@ void m_layer_GS_ibutterfly(
     ){
 
     size_t real_count, real_step, twiddle_count, jump;
-    void *real_root_table;
+    const void *real_root_table;
 
     for(ptrdiff_t i = layers - 1; i >= 0; i--){
 
@@ -252,7 +252,7 @@ void m_layer_GS_ibutterfly(
 
         jump = step << (layers - i);
 
-        real_root_table = (void*)_root_table + ((1u << i) - 1) * ring.sizeZ;
+        real_root_table = _root_table + ((1u << i) - 1) * ring.sizeZ;
 
         real_step = step << (layers - 1 - i);
 
@@ -284,7 +284,7 @@ void compressed_CT_NTT(
 
     size_t step, offset;
     size_t real_start_level, real_end_level;
-    void *real_root_table;
+    const void *real_root_table;
     size_t *level_indx;
 
     if(end_level < start_level){
@@ -309,7 +309,7 @@ void compressed_CT_NTT(
 
         offset = 0;
 
-        real_root_table = (void*)_root_table + ((1u << level) - 1) * ring.sizeZ;
+        real_root_table = _root_table + ((1u << level) - 1) * ring.sizeZ;
 
         for(size_t count = 0; count < (1u << level); count++){
 
@@ -345,7 +345,7 @@ void compressed_CT_iNTT(
 
     size_t step, offset;
     size_t real_start_level, real_end_level;
-    void *real_root_table;
+    const void *real_root_table;
     size_t *level_indx;
 
     if(end_level < start_level){
@@ -362,7 +362,7 @@ void compressed_CT_iNTT(
         real_end_level += (_profile.merged_layers)[i];
     }
 
-    real_root_table = (void*)_root_table + ((1u << real_start_level) - 1) * ring.sizeZ;
+    real_root_table = _root_table + ((1u << real_start_level) - 1) * ring.sizeZ;
 
     level_indx = (_profile.merged_layers) + start_level;
 
@@ -412,7 +412,7 @@ void compressed_GS_iNTT(
 
     size_t step, offset;
     ptrdiff_t real_start_level, real_end_level;
-    void *real_root_table;
+    const void *real_root_table;
     size_t *level_indx;
 
     if(end_level < start_level){
@@ -438,7 +438,7 @@ void compressed_GS_iNTT(
 
         offset = 0;
 
-        real_root_table = (void*)_root_table + ((1u << level) - 1) * ring.sizeZ;
+        real_root_table = _root_table + ((1u << level) - 1) * ring.sizeZ;
 
         for(size_t count = 0; count < (1u << level); count++){
 
